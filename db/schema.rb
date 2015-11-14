@@ -11,10 +11,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151107185322) do
+
+ActiveRecord::Schema.define(version: 20151114054231) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "agent_histories", force: :cascade do |t|
+    t.integer  "user_id",    null: false
+    t.date     "date",       null: false
+    t.integer  "likes",      null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "agent_histories", ["user_id"], name: "index_agent_histories_on_user_id", using: :btree
 
   create_table "election_records", force: :cascade do |t|
     t.integer  "user_id"
@@ -38,6 +49,20 @@ ActiveRecord::Schema.define(version: 20151107185322) do
     t.date   "vote_date"
     t.string "description"
   end
+
+  create_table "information", force: :cascade do |t|
+    t.integer  "user_id",           limit: 4
+    t.string   "party",             limit: 255
+    t.string   "job",               limit: 255
+    t.string   "party_job",         limit: 255
+    t.text     "experience",        limit: 65535
+    t.string   "election_position", limit: 255
+    t.string   "election_area",     limit: 255
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
+  end
+
+  add_index "information", ["user_id"], name: "index_information_on_user_id", using: :btree
 
   create_table "issues", force: :cascade do |t|
     t.string   "title"

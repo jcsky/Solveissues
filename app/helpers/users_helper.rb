@@ -12,4 +12,10 @@ module UsersHelper
     end
     country_hash
   end
+
+  def setup_user(user)
+    user.build_information unless user.information
+    user
+  end
+
 end

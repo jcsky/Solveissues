@@ -1,4 +1,23 @@
 <div class="container">
+  
+  <div class="row history-chart">
+    <div class="col-xs-12 sky-header"><h2>歷史名聲紀錄</h2></div>
+    <div class="col-xs-12">
+      <div class="ct-chart ct-golden-section" id="chart1"></div>
+    </div>
+
+    <script>
+    var likes = <%= escape_javascript @likes.to_json %>;
+    var date = <%= raw @date.as_json %>;
+
+    new Chartist.Line('#chart1', {
+      labels: date,
+      series: [likes]
+    });
+    </script>
+
+  </div>
+
   <div class="row">
 
     <% if @user.role == 1 && @user == current_user %>
