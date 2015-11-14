@@ -7,7 +7,7 @@
 
       <h3 class="text-center">地區分佈</h3>
       <% country_hash = Hash.new %>
-      <% country_hash=return_total_user_country_hash(@total_users) %>
+      <% country_hash = return_total_user_country_hash(@total_users) %>
       <% country_hash.each_key do |k| %>
         <div class="col-xs-3">
           <h5 class="text-center"><%= k %> : <%= country_hash[k] %></h5>
@@ -39,7 +39,7 @@
       <div class="spacing"></div>
       <% @user_issues.each do |issue| %>
       <li class="col-xs-6"><%= link_to issue.title, issue_path(issue) %></li>
-      <li class="col-xs-6 pull-left"><%= issue.votes_count %></li>
+      <li class="col-xs-6 pull-left"><%= issue.find_votes_for.size %></li>
       <br>
       <br>
       <% end %>
@@ -49,14 +49,15 @@
   <div class="row">
 
     <div class="col-xs-12 sky-header"><h2>相關的民代</h2></div>
-    <% @agent.each do |a| %>
-      <% same_issue = a.votes.select{ |i| @user_issues.map(&:id).include?(i.issue_id) }.size %>
-      <% if same_issue > 0 %>
+    <% @agents.each do |agent| %>
+    <!-- 需要排除votable_type = user -->
+      <% same_issues = agent.votes.select{ |i| @user_issues.map(&:id).include?(i.votable_id) && i.votable_type == "Issue" } %>
+      <% if same_issues.size > 0 %>
         <div class="col-xs-2 text-center user-img">
-          <%= image_tag(a.fb_image, :class => "w100p")%>
+          <%= image_tag(agent.fb_image, :class => "w100p")%>
 
-          <p class = "user-name"><%= a.name %></p>
-          <div class = "user-name">共同關注議題: <%= a.votes.select{ |i| @user_issues.map(&:id).include?(i.issue_id) }.size %></div>
+          <p class = "user-name"><%= agent.name %></p>
+          <div class = "user-name">共同關注議題: <%= same_issues.size %></div>
         </div>
       <% end %>
     <% end %>

@@ -37,9 +37,13 @@ gem "letter_opener", :group => :development
 # Use Unicorn as the app server
 # gem 'unicorn'
 gem 'pg'
-gem 'rails_12factor', group: :production
 
 gem 'faraday'
+
+gem 'acts_as_votable'
+
+gem 'capistrano-rails', :group => :development
+gem 'capistrano-passenger', :group => :development
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development

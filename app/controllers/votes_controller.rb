@@ -1,9 +1,20 @@
 class VotesController < ApplicationController
 
   before_action :authenticate_user!
-  before_action :set_issue
+
+  # Pages
+  def agent_list
+    @agent = User.where(role: "1").includes(:votes)
+    @user_issues = current_user.find_voted_items(:votable_type => 'Issue')
+
+    # current_user ? @user_issues = current_user.vote_issues : User.new.vote_issues
+
+    # way1
+    # Vote.where( :scope => "agent" ).group_by
+  end
 
   def create
+    set_issue
     vote = @issue.find_vote_by_user(current_user)
 
     unless vote
@@ -17,19 +28,10 @@ class VotesController < ApplicationController
         render :template => "votes/ajax"
       }
     end
-
-
-    # if current_user.votes.find_by_issue_id(params[:issue_id])
-    #   @vote = current_user.votes.create(:issue_id => params[:issue_id])
-    #   @issue_id = params[:issue_id]
-    #   respond_to do |format|
-    #     format.html
-    #     format.js
-    #   end
-    # end
   end
 
   def destroy
+    set_issue
     @vote = current_user.votes.find(params[:id])
     @vote.destroy
     @vote = nil
@@ -41,23 +43,48 @@ class VotesController < ApplicationController
       }
     end
   end
-  #   @vote = current_user.votes.find_by_issue_id(params[:issue_id])
-  #   if @vote
-  #     @vote.destroy
-  #     @issue_id = params[:issue_id]
-  #     respond_to do |format|
-  #       format.html
-  #       format.js{ }
-  #     end
-  #   end
-  # end
 
+  #Ajax
+
+  def support_issue
+    @issue = Issue.find(params[:id])
+    if current_user.role == 1
+      @issue.liked_by current_user, :vote_scope => "agent"
+    else
+      @issue.liked_by current_user
+    end
+  end
+
+  def unsupport_issue
+    @issue = Issue.find(params[:id])
+    if current_user.role == 1
+      @issue.unliked_by current_user, :vote_scope => "agent"
+    else
+      @issue.unliked_by current_user
+    end
+    render :support_issue
+  end
+
+  def like_user
+    @agent = User.find(params[:id])
+    @agent.liked_by current_user
+  end
+
+  def dislike_user
+    @agent = User.find(params[:id])
+    @agent.disliked_by current_user
+    render :like_user
+  end
+
+  def unlike_user
+    @agent = User.find(params[:id])
+    @agent.unliked_by current_user
+  end
 
 private
 
   def set_issue
     @issue = Issue.find(params[:issue_id])
   end
-
 
 end

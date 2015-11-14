@@ -3,7 +3,7 @@ namespace :dev do
   country = %w[台北市 基隆市 新北市 連江縣 宜蘭縣 新竹市 新竹縣 桃園縣 苗栗縣 台中市 彰化縣 南投縣 嘉義市 嘉義縣 雲林縣 台南市 高雄市 澎湖縣 金門縣 屏東縣 台東縣 花蓮縣]
   usrenames = %w[零加隆 王晶平 馬一九 無思哇 花媽 沒勝文 扁扁 賴德德 波多野結衣 志玲姐姐 陳小刀 賭神 賭聖 習老大 喔爸爸 東拉蕊 吳中憲]
 
-
+  task :test_db_rebuild => ['db:drop:all', 'db:create', 'db:migrate', 'db:seed', 'dev:mass_user', 'dev:user_vote']
 
   # OK
   task :mass_user => :environment do
@@ -30,9 +30,20 @@ namespace :dev do
     User.all.each {|u|
       inserts =[]
       hash = {}
-      u.role == 1 ? times = [10,13,15,17,20].sample : times = [3,5,7,9,11].sample
+      u.role == 1 ? times = [5,10,15,20,25,35].sample : times = [3,5,7,9,11].sample
+      if u.role == 1
+        times = [5,10,15,20,25,35].sample
+        vote_scope = "agent"
+      else
+        times = [3,5,7,9,11].sample
+        vote_scope = nil
+      end
+
       Issue.all.sample(times).each{|i|
-        hash = {:user => u, :issue => i}
+        # hash = {:user => u, :issue => i}
+        hash = {:voter_type => "User", :voter_id => u.id, :votable_type => "Issue", :votable_id => i.id, :vote_scope => vote_scope,
+          :vote_weight => 1, :vote_flag => true
+        }
         inserts.push hash
       }
       vote = Vote.create(inserts)

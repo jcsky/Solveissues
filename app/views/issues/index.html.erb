@@ -11,22 +11,28 @@
       </thead>
 
       <tbody>
-        <% @issues.each do |issue| %>
-
-        <tr>
-          <td><%= link_to issue.title, issue %></td>
-          <td id="count-<%= issue.id %>"><%= issue.votes_count %></td>
-          <td>
-            <% if current_user %>
-              <% vote = issue.find_vote_by_user(current_user) %>
+      <!-- 有登入時 -->
+        <% if current_user %>
+          <% @issues.each do |issue| %>
+          <tr>
+            <td><%= link_to issue.title, issue %></td>
+            <td id="count-<%= issue.id %>"><%= issue.find_votes_for.size %></td>
+            <td>
               <div id="like-<%= issue.id %>" class="text-align">
-                <%= render :partial => "votes/show", :locals => {:issue => issue, :vote => vote} %>
+                <%= render :partial => "votes/show", :locals => {:issue => issue} %>
               </div>
-            <% else %>
-                <%= icon("thumbs-up") %>
-            <% end %>
-          </td>
-        </tr>
+            </td>
+          </tr>
+          <% end %>
+      <!-- 末登入時 -->
+        <% else %>
+          <% @issues.each do |issue| %>
+          <tr>
+            <td><%= link_to issue.title, issue %></td>
+            <td id="count-<%= issue.id %>"><%= issue.get_likes.size %></td>
+            <td><%= icon("thumbs-up") %></td>
+          </tr>
+          <% end %>
         <% end %>
       </tbody>
     </table>

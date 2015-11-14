@@ -13,6 +13,8 @@ class User < ActiveRecord::Base
   # :path => ":rails_root/public/system/menus/:attachment/:id_partition/:style/:filename"
   validates_attachment_content_type :photo, :content_type => /\Aimage\/.*\Z/
 
+  acts_as_voter
+  acts_as_votable
 
   def self.from_omniauth(auth)
     where(fb_uid: auth.uid).first_or_create do |user|
@@ -31,7 +33,6 @@ class User < ActiveRecord::Base
   def self.get_fb_data(access_token)
     conn = Faraday.new(:url => 'https://graph.facebook.com')
     res = conn.get '/v2.5/me', { :access_token => access_token }
-    byebug
     if res.status == 200
       JSON.parse( res.body )
     else
@@ -47,8 +48,6 @@ class User < ActiveRecord::Base
       end
     end
   end
-
-
 
   def generate_authentication_token
     token = nil

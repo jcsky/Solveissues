@@ -1,6 +1,6 @@
 class Vote < ActiveRecord::Base
 
-  belongs_to :user
-  belongs_to :issue, :counter_cache => true
+  # belongs_to :user
+  # belongs_to :issue, :counter_cache => true
 
 end

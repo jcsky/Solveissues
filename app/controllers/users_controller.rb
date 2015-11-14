@@ -3,16 +3,21 @@ class UsersController < ApplicationController
   before_action :set_user, :only => [:show, :edit, :update]
 
   def show
-    @agent = User.where(role: "1").includes(:votes)
-    @user_issues = @user.vote_issues
+    @user_issues = @user.find_voted_items(:votable_type => 'Issue')
+    # @total_users = User.includes(:votes).where("votes.votable_type" => "Issue", "votes.votable_id" => @user_issues.map(&:id))
+    total_user_ids = Vote.where(:votable_id => @user_issues.map(&:id), :votable_type => "Issue").pluck(:voter_id).uniq
+    @total_users = User.find( total_user_ids )
+    @agents = User.where(:role => 1, :id => total_user_ids).includes(:votes)
+    # @agent = User.where(role: "1").includes(:votes)
+    # @user_issues = @user.vote_issues
 
-    if @user.role == 1
-      total_user_ids = Vote.where( :issue_id => @user_issues.map(&:id) ).pluck(:user_id).uniq
-      @total_users = User.find( total_user_ids )
+    # if @user.role == 1
+    #   total_user_ids = Vote.where( :issue_id => @user_issues.map(&:id) ).pluck(:user_id).uniq
+    #   @total_users = User.find( total_user_ids )
 
-      #@total_users = User.includes(:votes).where( "votes.issue_id" => @user_issues.map(&:id) )
-      #一個query完成
-    end
+    #   #@total_users = User.includes(:votes).where( "votes.issue_id" => @user_issues.map(&:id) )
+    #   #一個query完成
+    # end
   end
 
   def edit
@@ -27,10 +32,6 @@ class UsersController < ApplicationController
     end
   end
 
-  def agent_list
-    @agent = User.where(role: "1").includes(:votes)
-    current_user ? @user_issues = current_user.vote_issues : User.new.vote_issues
-  end
 
   def agent_show
 

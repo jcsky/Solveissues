@@ -1,0 +1,2 @@
+$("#like-<%= @issue.id %>").html("<%= j(render :partial => "show", :locals => {:issue => @issue}) %>")
+$("#count-<%= @issue.id %>").html("<%= j(render :partial => "count", :locals => {:issue => @issue}) %>")

@@ -27,11 +27,13 @@
       <% if current_user %>
         <li class="user_name"><%= link_to "hi ,#{current_user.user_name}","" %></li>
         <li><%= link_to "民代列表", agent_list_path%></li>
-        <li><%= link_to "我的議題", user_path(current_user)%></li>
+        <li><%= link_to "議題列表", issues_path %></li>
+        <li><%= link_to "我的頁面", user_path(current_user)%></li>
         <li><%= link_to "編輯個人資料",edit_user_path(current_user) %></li>
         <li><%= link_to "登出", des_user_session_path %></li>
       <% else %>
         <li><%= link_to "民代列表", agent_list_path %></li>
+        <li><%= link_to "議題列表", issues_path %></li>
         <li><%= link_to "FB登入", user_omniauth_authorize_path(:facebook) %></li>
       <% end %>
       <!-- <li class="dropdown">

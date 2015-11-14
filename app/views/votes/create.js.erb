@@ -1,3 +1,0 @@
-// $("#like-<%= @issue_id %>").attr('text':'支持','method':'destroy')();
-// $("#like-<%= @issue_id %>").remove();
-$("#like-<%= @issue_id %>").prepend("<%= link_to '支持', support_path(:issue_id => @issue_id), :id => "support-#{@issue_id}" , :remote => true %>");
