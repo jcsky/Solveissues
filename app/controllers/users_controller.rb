@@ -48,7 +48,7 @@ private
   end
 
   def user_params
-    params.require(:user).permit(:name, :email, :description, :country, :information_attributes => [:party, :job, :party_job, :experience, :election_position, :experience, :election_area])
+    params.require(:user).permit(:name, :email, :description, :country, :register_homecity, :birthday, :gender, :information_attributes => [:party, :job, :party_job, :experience, :election_position, :experience, :election_area])
   end
 
   def get_history_likes

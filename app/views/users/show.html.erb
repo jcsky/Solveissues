@@ -1,47 +1,58 @@
 <div class="container">
+  <h1>
+    <%if @user.role == 1%>
+      "職稱"-<%=@user.name%>
+    <%else%>
+      <%=@user.name%>
+    <%end%>
+  </h1> 
+
+  <%if @user.role == 1%>
+    <div class="fb-share-button" data-href="<%=user_path(@user)%>" data-layout="button_count"></div>
   
-  <div class="row history-chart">
-    <div class="col-xs-12 sky-header"><h2>歷史名聲紀錄</h2></div>
-    <div class="col-xs-12">
-      <div class="ct-chart ct-golden-section" id="chart1"></div>
+    <div class="row history-chart">
+      <div class="col-xs-12 sky-header"><h2>歷史名聲紀錄</h2></div>
+      <div class="col-xs-12">
+        <div class="ct-chart ct-golden-section" id="chart1"></div>
+      </div>
+
+      <script>
+      var likes = <%= escape_javascript @likes.to_json %>;
+      var date = <%= raw @date.as_json %>;
+
+      new Chartist.Line('#chart1', {
+        labels: date,
+        series: [likes]
+      });
+      </script>
+
     </div>
 
-    <script>
-    var likes = <%= escape_javascript @likes.to_json %>;
-    var date = <%= raw @date.as_json %>;
+    <div class="row">
 
-    new Chartist.Line('#chart1', {
-      labels: date,
-      series: [likes]
-    });
-    </script>
+      <% if @user.role == 1 && @user == current_user %>
+        <div class="col-xs-12 sky-header"><h2>接觸的總人數: <%= @total_users.size %></h2></div>
+        <h1></h1>
 
-  </div>
-
-  <div class="row">
-
-    <% if @user.role == 1 && @user == current_user %>
-      <div class="col-xs-12 sky-header"><h2>接觸的總人數: <%= @total_users.size %></h2></div>
-      <h1></h1>
-
-      <h3 class="text-center">地區分佈</h3>
-      <% country_hash = Hash.new %>
-      <% country_hash = return_total_user_country_hash(@total_users) %>
-      <% country_hash.each_key do |k| %>
-        <div class="col-xs-3">
-          <h5 class="text-center"><%= k %> : <%= country_hash[k] %></h5>
-        </div>
-        <div class="col-xs-9">
-          <div class="progress">
-          <%= p = (country_hash[k]*100/ @total_users.size ).to_i.to_s + "%" %>
-            <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: <%= p %>">
-              <span class="sr-only">40% Complete (success)</span>
+        <h3 class="text-center">地區分佈</h3>
+        <% country_hash = Hash.new %>
+        <% country_hash = return_total_user_country_hash(@total_users) %>
+        <% country_hash.each_key do |k| %>
+          <div class="col-xs-3">
+            <h5 class="text-center"><%= k %> : <%= country_hash[k] %></h5>
+          </div>
+          <div class="col-xs-9">
+            <div class="progress">
+            <%= p = (country_hash[k]*100/ @total_users.size ).to_i.to_s + "%" %>
+              <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: <%= p %>">
+                <span class="sr-only">40% Complete (success)</span>
+              </div>
             </div>
           </div>
-        </div>
+        <% end %>
       <% end %>
-    <% end %>
-  </div>
+    </div>
+  <%end%>
 
   <div class="row">
     <div class="col-xs-12 sky-header"><h2>支持的議題</h2></div>

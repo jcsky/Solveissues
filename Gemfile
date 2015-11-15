@@ -34,6 +34,7 @@ gem "omniauth-facebook"
 gem 'ransack'
 gem 'paperclip'
 gem "letter_opener", :group => :development
+gem "select2-rails"
 # Use Unicorn as the app server
 # gem 'unicorn'
 gem 'pg'

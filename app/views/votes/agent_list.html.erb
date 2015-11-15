@@ -1,6 +1,6 @@
 <div class="container">
   <div class="row">
-    <div class="col-xs-12 sky-header"><h2>目前民代總人數: <%= @agent.size %></h2></div>
+    <div class="col-xs-12 sky-header"><h2>目前民代總人數: <%= @total_agents.size %></h2></div>
       <table class="table table-hover">
         <thead>
           <tr>
@@ -10,7 +10,7 @@
           </tr>
         </thead>
         <tbody>
-          <% @agent.each do |agent| %>
+          <% @agents.each do |agent| %>
             <tr>
               <!-- 列出user和這位民代agent的資訊 -->
               <td><%= link_to agent.name, user_path(agent) %></td>
@@ -40,4 +40,5 @@
         </tbody>
       </table>
   </div>
+  <%= paginate @agents %>
 </div>

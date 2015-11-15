@@ -14,20 +14,38 @@
      </div>
     <% end %>
 
-     <div class="field">
+      <div class="field">
         <%= f.label :email %>
-        <%= f.email_field :email, autofocus: true, :class => "form-control form-width" %>
+        <br>
+        <%= @user.email %>
       </div>
       <br>
       <div class="field">
         <%= f.label :name %>
-        <%= f.text_field :name, autofocus: true, :class => "form-control form-width" %>
+        <br>
+        <%= @user.name %>
       </div>
       <br>
       <div class="field">
-          <%= f.label :country %><br />
+          <%= f.label :country, "現居地" %><br />
           <%= f.select :country, %w[台北市 基隆市 新北市 連江縣 宜蘭縣 新竹市 新竹縣 桃園縣 苗栗縣 台中市 彰化縣 南投縣 嘉義市 嘉義縣 雲林縣 台南市 高雄市 澎湖縣 金門縣 屏東縣 台東縣 花蓮縣],
            {}, :class => "form-control form-width" %>
+      </div>
+      <br>
+      <div class="field">
+          <%= f.label :register_homecity, "戶籍地" %><br />
+          <%= f.select :register_homecity, %w[台北市 基隆市 新北市 連江縣 宜蘭縣 新竹市 新竹縣 桃園縣 苗栗縣 台中市 彰化縣 南投縣 嘉義市 嘉義縣 雲林縣 台南市 高雄市 澎湖縣 金門縣 屏東縣 台東縣 花蓮縣],
+           {}, :class => "form-control form-width" %>
+      </div>
+      <br>
+      <div class="field">
+        <%= f.label :birthday, "生日" %>
+        <%= f.text_field :birthday, autofocus: true, :class => "form-control form-width" %>
+      </div>
+      <br>
+      <div class="field">
+        <%= f.label :gender, "性別" %>
+        <%= f.text_field :gender, autofocus: true, :class => "form-control form-width" %>
       </div>
       <br>
 
