@@ -8,6 +8,7 @@ class User < ActiveRecord::Base
   has_many :votes, :dependent => :destroy
   has_many :vote_issues, through: :votes, source: :issue, :dependent => :destroy
   has_many :election_records
+  has_many :issues, :foreign_key => "creator"
   has_one :information, :dependent => :destroy
   accepts_nested_attributes_for :information, :allow_destroy => true, :reject_if => :all_blank
 

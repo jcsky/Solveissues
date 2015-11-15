@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class AgentHistoryTest < ActiveSupport::TestCase
+class TaggingTest < ActiveSupport::TestCase
   # test "the truth" do
   #   assert true
   # end

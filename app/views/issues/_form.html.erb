@@ -10,20 +10,36 @@
       </ul>
     </div>
   <% end %>
-
-  <div class="col-md-8 col-md-push-2">
-    <%= f.label "議題名稱" %><br>
-    <%= f.text_field :title, :class => "w100p" %>
+  
+  <div class="col-md-8 col-md-push-2 form-group">
+    <%= f.label :title, "議題名稱" %><br>
+    <%= f.text_field :title, :class => "w100p form-control", :required => "required" %>
   </div>
-  <div class="col-md-8 col-md-push-2">
-    <%= f.label "說明" %><br>
-    <%= f.text_area :description, :class => "w100p", :rows => 10 %>
+
+  <div class="col-md-8 col-md-push-2 form-group">
+    <%= f.label :tag_list, "標籤" %><br>
+    <%= f.select :tag_list, Tag.all.map{ |x| x.name }, {}, :multiple => true, :class => "form-control", :id => "tags" %>
+  </div>
+
+  <div class="col-md-8 col-md-push-2 form-group">
+    <%= f.label :description, "說明" %><br>
+    <%= f.text_area :description, :class => "w100p form-control", :required => "required", :rows => 10 %>
   </div>
 <!--   <div class="field">
     <%#= f.label :creator %><br>
     <%#= f.text_field :creator %>
   </div> -->
-  <div class="col-md-8 col-md-push-2">
-    <%= f.submit "建立議題"%>
+  <div class="col-md-8 col-md-push-2 form-group">
+    <%= f.submit "建立議題", :class => "btn btn-default" %>
   </div>
 <% end %>
+
+
+<script>
+  $( "#tags" ).select2({
+    placeholder: "Add some tags.",
+    tags: true,
+    tokenSeparators: [',', ' '],
+    theme: "bootstrap"
+  });
+</script>
