@@ -3,7 +3,18 @@ namespace :dev do
   country = %w[台北市 基隆市 新北市 連江縣 宜蘭縣 新竹市 新竹縣 桃園縣 苗栗縣 台中市 彰化縣 南投縣 嘉義市 嘉義縣 雲林縣 台南市 高雄市 澎湖縣 金門縣 屏東縣 台東縣 花蓮縣]
   usrenames = %w[零加隆 王晶平 馬一九 無思哇 花媽 沒勝文 扁扁 賴德德 波多野結衣 志玲姐姐 陳小刀 賭神 賭聖 習老大 喔爸爸 東拉蕊 吳中憲]
 
-  task :test_db_rebuild => ['db:drop:all', 'db:create', 'db:migrate', 'db:seed', 'dev:mass_user', 'dev:user_vote', 'dev:agent_history']
+  task :test_db_rebuild => ['db:drop:all', 'db:create', 'db:migrate', 'db:seed', 'dev:mass_user', 'dev:user_vote', 'dev:agent_history', 'dev:random_tagging']
+
+  task :random_tagging => :environment do
+    Tagging.delete_all
+    puts "隨機標籤"
+    Issue.all.each do |x|
+      tagging = [*1..17].sample(1 +  Random.rand(4))
+      tagging.each do |i|
+        x.taggings.create(:tag_id => i )
+      end
+    end
+  end
 
   task :agent_history => :environment do
     puts "產生一個月名聲紀錄"

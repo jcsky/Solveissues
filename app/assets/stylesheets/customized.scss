@@ -1,6 +1,8 @@
 @import "bootstrap-sprockets";
 @import "bootstrap";
 @import "chartist.scss";
+@import "select2";
+@import "select2-bootstrap";
 
 
 .form-width {
@@ -61,6 +63,7 @@ li {
 }
 .w100p{
   width: 100%;
+  height: 80px;
 }
 .issue-description-box{
   padding:20px 50px;

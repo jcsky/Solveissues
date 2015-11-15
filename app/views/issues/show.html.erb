@@ -4,6 +4,10 @@
     <div class="issue-description-box">
       <br>
       <p><%= @issue.description %></p>
+      <br>
+      <p> 標籤：
+        <%= render :partial => "issue_tags", collection: @issue.tags, as: :tag %>
+      </p>
       <legend></legend>
       <div class="col-xs-9 text-right"><h4>支持這個議題?</h4></div>
       <div class="col-xs-3 position-right-botton">
@@ -17,6 +21,11 @@
       </div>
     </div>
   </div>
+  
+  <br>
+  
+  <div class="fb-share-button" data-href="<%=issue_path(@issue)%>" data-layout="button_count"></div>
+  
   <br>
 
   <div class="row">

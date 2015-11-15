@@ -4,7 +4,8 @@ class VotesController < ApplicationController
 
   # Pages
   def agent_list
-    @agent = User.where(role: "1").includes(:votes)
+    @total_agents = User.where(role: "1").includes(:votes)
+    @agents = @total_agents.page(params[:page]).per(10)
     @user_issues = current_user.find_voted_items(:votable_type => 'Issue')
 
     # current_user ? @user_issues = current_user.vote_issues : User.new.vote_issues

@@ -17,7 +17,7 @@ arrs[1..arrs.length].each do |row|
   user.birthday = Date.parse(row[1]) if row[1]
   user.gender = row[2]
   user.role = 1
-  user.fb_image = Faker::Avatar.image
+  user.fb_image = "https://kev.inburke.com/wp-content/uploads/2014/04/hackedocat.png"
 
   election_record = user.election_records.new
   election_record.party = row[3]
@@ -33,8 +33,34 @@ arrs[1..arrs.length].each do |row|
 
 end
 
+puts '重整立委頭像資料'
+require 'csv'
+arrs = CSV.read("config/legislator_ad8.csv")
+arrs[1..arrs.length].each do |row|
+
+  user = User.find_or_initialize_by(name: row[5].to_s)
+  user.fb_image = row[12].to_s
+  user.save
+
+end
+
+
 puts '產生議題資料'
 issues = CSV.read("config/demoissues.csv")
 issues[1..issues.length].each do |row|
   issue = Issue.create(title: row[0], description: row[1], creator: User.all.sample)
 end
+
+puts '產生標籤'
+tags = CSV.read("config/tags.csv")
+tags[1..tags.length].each do |row|
+  tags = Tag.create(name: row[0])
+end
+
+
+
+
+
+
+
+
