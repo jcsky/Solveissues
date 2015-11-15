@@ -17,7 +17,10 @@ arrs[1..arrs.length].each do |row|
   user.birthday = Date.parse(row[1]) if row[1]
   user.gender = row[2]
   user.role = 1
-  user.fb_image = Faker::Avatar.image
+  
+  if user.fb_image == nil
+    user.fb_image = "https://kev.inburke.com/wp-content/uploads/2014/04/hackedocat.png"
+  end
 
   election_record = user.election_records.new
   election_record.party = row[3]
