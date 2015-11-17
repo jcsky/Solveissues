@@ -1,4 +1,15 @@
+<script type="text/javascript">
+  var word_array = <%= raw @tag_cloud.to_json.html_safe %>;
+
+  $(function() {
+    $("#tag-cloud").jQCloud(word_array);
+  });
+</script>
+
 <div class="container">
+  
+  <div id="tag-cloud"></div>
+
   <div class="row">
 
     <table class="table table-striped">
@@ -6,7 +17,7 @@
         <tr>
           <th class="col-xs-7"><h4>議題</h4></th>
           <th class="col-xs-2"><h4>人數</h4></th>
-          <th class="col-xs-3"> <%= link_to '建立新議題', new_issue_path, class: "btn btn-success w100p" %></th>
+          <th class="col-xs-3"> <%= link_to '建立新議題', new_issue_path, class: "btn btn-success" %></th>
         </tr>
       </thead>
 

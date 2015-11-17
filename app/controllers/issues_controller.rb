@@ -1,6 +1,7 @@
 class IssuesController < ApplicationController
 
  before_action :set_issue, only: [:show, :edit, :update, :destroy]
+ before_action :tag_cloud, only: [:index]
 
   # GET /issues
   # GET /issues.json
@@ -76,4 +77,15 @@ class IssuesController < ApplicationController
     def issue_params
       params.require(:issue).permit(:title, :description, :creator, :tag_list => [])
     end
+
+    def tag_cloud
+      # Tag cloud
+      hash = []
+      Tag.all.order('issue_count DESC').first(20).each do |x|
+        weight = x.issue_count
+        hash << {text: x.name, weight: weight, link: "#"}
+      end
+      @tag_cloud = hash
+    end
+
 end

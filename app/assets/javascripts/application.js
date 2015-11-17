@@ -13,7 +13,7 @@
 //= require jquery
 //= require bootstrap-sprockets
 //= require jquery_ujs
-//= require turbolinks
 //= require chartist
 //= require select2
+//= require jqcloud-1.0.4
 //= require_tree .
