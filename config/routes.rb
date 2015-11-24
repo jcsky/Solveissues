@@ -33,4 +33,8 @@ Rails.application.routes.draw do
     get "same_votes_reps" => "users#same"
   end
 
+  namespace :admin do
+    resources :users
+  end
+
 end
