@@ -20,3 +20,4 @@
 /config/facebook.yml
 /config/application.yml
 /.DS_Store
+/vendor/assets/bower_components

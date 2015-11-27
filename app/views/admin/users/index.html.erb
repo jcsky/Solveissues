@@ -1,16 +1,111 @@
-民代總人數: <%=@agents.count%>
-<br> 
-各類民代人數
-<br>
-User人數 : <%=@users.count%>
-<br>
-User年齡分佈比例?
-<br>
-議題總數: <%=@issues.count%>
-<br>
-民代 total likes: <%= @total_agents_likes%>
-<br>
-民代 total dislikes: <%= @total_agents_dislikes%>
-<br>
-議題支持總數：<%= @total_issues_likes%>
-<br>
+<div class="col-md-3">
+  <div class="info-box">
+    <!-- Apply any bg-* class to to the icon to color it -->
+    <span class="info-box-icon bg-red"><i class="fa fa-odnoklassniki"></i></span>
+    <div class="info-box-content">
+      <span class="info-box-text">民代總人數</span>
+      <span class="info-box-number"><%=@agents.count%></span>
+    </div><!-- /.info-box-content -->
+  </div><!-- /.info-box -->
+</div>
+
+<div class="col-md-3">
+  <div class="info-box">
+    <!-- Apply any bg-* class to to the icon to color it -->
+    <span class="info-box-icon bg-green"><i class="fa fa-users"></i></span>
+    <div class="info-box-content">
+      <span class="info-box-text">User人數</span>
+      <span class="info-box-number"><%=@users.count%></span>
+    </div><!-- /.info-box-content -->
+  </div><!-- /.info-box -->
+</div>
+
+<div class="col-md-3">
+  <div class="info-box">
+    <!-- Apply any bg-* class to to the icon to color it -->
+    <span class="info-box-icon bg-blue"><i class="fa fa-info-circle"></i></span>
+    <div class="info-box-content">
+      <span class="info-box-text">議題總數</span>
+      <span class="info-box-number"><%=@issues.count%></span>
+    </div><!-- /.info-box-content -->
+  </div><!-- /.info-box -->
+</div>
+<div class="clearfix"></div>
+
+<div class="col-md-12">
+  <!-- Apply any bg-* class to to the info-box to color it -->
+  <div class="info-box bg-red">
+    <span class="info-box-icon"><i class="fa fa-thumbs-o-up"></i></span>
+    <div class="info-box-content">
+      <span class="info-box-text">民代施政支持度</span>
+      <span class="info-box-number"><%= @total_agents_likes%></span>
+      <!-- The progress section is optional -->
+      <div class="progress">
+        <div class="progress-bar" style="width: 50%"></div>
+      </div>
+      <span class="progress-description">
+        50% 滿意
+      </span>
+    </div><!-- /.info-box-content -->
+  </div><!-- /.info-box -->
+</div>
+
+<div class="col-md-12">
+  <div class="info-box bg-red">
+    <span class="info-box-icon"><i class="fa fa-thumbs-o-down"></i></span>
+    <div class="info-box-content">
+      <span class="info-box-text">民代施政不滿度</span>
+      <span class="info-box-number"><%= @total_agents_dislikes%></span>
+      <!-- The progress section is optional -->
+      <div class="progress">
+        <div class="progress-bar" style="width: 70%"></div>
+      </div>
+      <span class="progress-description">
+        70% 不滿意
+      </span>
+    </div><!-- /.info-box-content -->
+  </div><!-- /.info-box -->
+</div>
+
+<div class="col-md-12">
+  <div class="info-box bg-blue">
+    <span class="info-box-icon"><i class="fa fa-hand-o-up"></i></span>
+    <div class="info-box-content">
+      <span class="info-box-text">議題支持總數</span>
+      <span class="info-box-number"><%= @total_issues_likes%></span>
+      <!-- The progress section is optional -->
+      <div class="progress">
+        <div class="progress-bar" style="width: 30%"></div>
+      </div>
+      <span class="progress-description">
+        30% 支持率
+      </span>
+    </div><!-- /.info-box-content -->
+  </div><!-- /.info-box -->
+</div>
+
+<div class="clearfix"></div>
+
+<!-- AREA CHART -->
+<div class="box box-solid box-success">
+  <div class="box-header with-border">
+    <div class="info-box-content">
+      <h3 class="box-title"><i class="fa fa-users"></i> User年齡分佈比例</h3>
+    </div>
+    <div class="box-tools pull-right">
+      <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+      <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+    </div>
+  </div>
+  <div class="box-body">
+    <div class="chart">
+      <canvas id="areaChart" style="height:250px"></canvas>
+    </div>
+  </div><!-- /.box-body -->
+</div><!-- /.box -->
+
+
+
+<div class="clearfix"></div>
+
+
