@@ -1,6 +1,6 @@
 module UsersHelper
 
-  def return_total_user_country_hash(total_users)
+  def return_users_country_hash(total_users)
     country_hash = Hash.new
     total_users.each do |user|
       user.country
@@ -16,6 +16,10 @@ module UsersHelper
   def setup_user(user)
     user.build_information unless user.information
     user
+  end
+
+  def render_user_name_link(user)
+    link_to user.name, user_path(user), :class=>"user-name"
   end
 
 end

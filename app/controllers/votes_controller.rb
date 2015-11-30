@@ -1,18 +1,7 @@
 class VotesController < ApplicationController
 
   before_action :authenticate_user!
-
-  # Pages
-  def agent_list
-    @total_agents = User.where(role: "1").includes(:votes)
-    @agents = @total_agents.page(params[:page]).per(10)
-    @user_issues = current_user.find_voted_items(:votable_type => 'Issue')
-
-    # current_user ? @user_issues = current_user.vote_issues : User.new.vote_issues
-
-    # way1
-    # Vote.where( :scope => "agent" ).group_by
-  end
+  before_action :find_latest_agent_vote, only: [:like_user, :dislike_user, :unlike_user]
 
   def create
     set_issue
@@ -66,26 +55,45 @@ class VotesController < ApplicationController
     render :support_issue
   end
 
+  # user_voted_to_agent
+
   def like_user
-    @agent = User.find(params[:id])
-    @agent.liked_by current_user
+    if @latest_agent_vote
+      @latest_agent_vote.value = 1
+      @latest_agent_vote.save
+    else
+      LatestAgentVote.create(:agent_id=>@agent.id, :user_id=>current_user.id, :value => 1)
+    end
+    redirect_to agent_list_path
   end
 
   def dislike_user
-    @agent = User.find(params[:id])
-    @agent.disliked_by current_user
-    render :like_user
+    if @latest_agent_vote
+      @latest_agent_vote.value = -1
+      @latest_agent_vote.save
+    else
+      LatestAgentVote.create(:agent_id=>@agent.id, :user_id=>current_user.id, :value => -1)
+    end
+    redirect_to agent_list_path
   end
 
   def unlike_user
-    @agent = User.find(params[:id])
-    @agent.unliked_by current_user
+    if @latest_agent_vote
+      @latest_agent_vote.destroy
+    end
+
+    redirect_to agent_list_path
   end
 
 private
 
   def set_issue
     @issue = Issue.find(params[:issue_id])
+  end
+
+  def find_latest_agent_vote
+    @agent = User.find(params[:id])
+    @latest_agent_vote = LatestAgentVote.find_by(:agent_id=>@agent.id, :user_id=>current_user.id)
   end
 
 end

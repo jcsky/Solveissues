@@ -7,11 +7,19 @@
 </script>
 
 <div class="container">
-  
+
   <div id="tag-cloud"></div>
 
   <div class="row">
-
+    <h4>
+      <% if params[:tag] %>
+        <%= "搜尋標籤結果：" + params[:tag] %>
+        <%= link_to '', issues_path, :class => "glyphicon glyphicon-remove" %>
+      <% elsif params[:q] %>
+        <%= "搜尋關鍵字：" + params[:q][:title_cont] %>
+        <%= link_to '', issues_path, :class => "glyphicon glyphicon-remove" %>
+      <% end %>
+    </h4>
     <table class="table table-striped">
       <thead>
         <tr>
@@ -20,31 +28,8 @@
           <th class="col-xs-3"> <%= link_to '建立新議題', new_issue_path, class: "btn btn-success" %></th>
         </tr>
       </thead>
-
       <tbody>
-      <!-- 有登入時 -->
-        <% if current_user %>
-          <% @issues.each do |issue| %>
-          <tr>
-            <td><%= link_to issue.title, issue %></td>
-            <td id="count-<%= issue.id %>"><%= issue.find_votes_for.size %></td>
-            <td>
-              <div id="like-<%= issue.id %>" class="text-align">
-                <%= render :partial => "votes/show", :locals => {:issue => issue} %>
-              </div>
-            </td>
-          </tr>
-          <% end %>
-      <!-- 末登入時 -->
-        <% else %>
-          <% @issues.each do |issue| %>
-          <tr>
-            <td><%= link_to issue.title, issue %></td>
-            <td id="count-<%= issue.id %>"><%= issue.get_likes.size %></td>
-            <td><%= icon("thumbs-up") %></td>
-          </tr>
-          <% end %>
-        <% end %>
+        <%= render partial: "common/issues_tbody", collection: @issues, as: :issue %>
       </tbody>
     </table>
 

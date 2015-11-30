@@ -1,48 +1,50 @@
 <div class="container">
   <div class="row">
-    <div class="col-xs-12 sky-header"><h2><%= @issue.title %></h2></div>
-    <div class="issue-description-box">
-      <br>
-      <p><%= @issue.description %></p>
-      <br>
-      <p> 標籤：
-        <%= render :partial => "issue_tags", collection: @issue.tags, as: :tag %>
-      </p>
-      <legend></legend>
-      <div class="col-xs-9 text-right"><h4>支持這個議題?</h4></div>
-      <div class="col-xs-3 position-right-botton">
-        <% if current_user %>
-          <div id="like-<%= @issue.id %>" class="text-center">
-            <%= render :partial => "votes/show", :locals => {:issue => @issue} %>
+    <div class="col-xs-12">
+      <div class="panel panel-warning">
+        <div class="panel-heading">
+          <h2><%= @issue.title %> <div class="fb-share-button" data-href="<%= issue_path(@issue) %>" data-layout="button_count"></div></h2>
+        </div>
+        <div class="panel-body">
+          <div class="col-xs-6">
+            標籤：<%= render :partial => "issue_tags", collection: @issue.tags, as: :tag %>
           </div>
-        <% else %>
-          <%= icon("thumbs-up") %>
-        <% end %>
+
+          <div class="col-xs-3 text-right"><h4><%= @issue.liked_users.size %>人支持</h4></div>
+          <div class="col-xs-3">
+            <% if login? %>
+              <div id="like-<%= @issue.id %>" class="text-center">
+                <%= render_issue_like_botton(@issue) %>
+              </div>
+            <% else %>
+              <%= icon("thumbs-up") %>
+            <% end %>
+          </div>
+          <article><%= @issue.description %></article>
+        </div>
       </div>
     </div>
   </div>
-  
-  <br>
-  
-  <div class="fb-share-button" data-href="<%=issue_path(@issue)%>" data-layout="button_count"></div>
-  
+
   <br>
 
   <div class="row">
-    <div class="col-xs-12 sky-header"><h2>支持此議題的民代</h2></div>
-
-      <% @issue.find_votes_for(:vote_scope => 'agent').each do |v| %>
-        <% agent = User.find(v.voter_id) %>
-        <%= link_to user_path(agent) do %>
-        <div class="col-xs-2 text-center user-img"><%= image_tag(agent.fb_image, :class => "w100p")%>
-          <p class = "user-name"><%= agent.name %></p>
+    <div class="col-xs-12 sky-header">
+      <h2>支持的民代</h2>
+    </div>
+    <% @issue.liked_agents.each do |agent| %>
+      <%= link_to user_path(agent) do %>
+        <div class="col-xs-2 text-center user-img">
+          <%= image_tag(agent.fb_image, :class => "w100p")%>
+          <p><%= agent.name %></p>
         </div>
-        <% end %>
       <% end %>
-
+    <% end %>
   </div>
 
   <div class="row"></div>
-    <%= link_to "回議題總覽",issues_path, :class => "btn btn-default" %>
+    <div class="col-md-2 col-md-push-5">
+      <%= link_to "回議題總覽",issues_path, :class => "btn btn-default" %>
+    </div>
   </div>
 </div>

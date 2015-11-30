@@ -1,0 +1,17 @@
+<% if login? %>
+  <tr>
+    <td><%= render_issue_name_link(issue) %></td>
+    <td id="count-<%= issue.id %>"><i><%= issue.liked_users.size %></i></td>
+    <td>
+      <div id="like-<%= issue.id %>" class="text-align">
+        <%= render_issue_like_botton(issue) %>
+      </div>
+    </td>
+  </tr>
+<% else %>
+  <tr>
+    <td><%= link_to issue.title, issue %></td>
+    <td id="count-<%= issue.id %>"><i><%= issue.liked_users.size %></i></td>
+    <td><%= icon("thumbs-up") %></td>
+  </tr>
+<% end %>

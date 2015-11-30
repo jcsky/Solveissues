@@ -14,8 +14,7 @@ Devise.setup do |config|
   # with default "from" parameter.
   # config.mailer_sender = 'please-change-me-at-config-initializers-devise@example.com'
 
-  fb_config = YAML.load(File.read("#{Rails.root}/config/facebook.yml"))[Rails.env]
-  config.omniauth :facebook, fb_config["app_id"], fb_config["secret"], scope: 'email', info_fields: 'email, name, birthday, gender, hometown, is_verified, location, locale'
+  config.omniauth :facebook, Settings.fb_app_id, Settings.fb_secret, scope: 'email', info_fields: 'email, name, birthday, gender, hometown, is_verified, location, locale'
   # https://developers.facebook.com/docs/graph-api/reference/user/
   # Someone is considered verified if they take any of the following actions:
   # Register for mobile

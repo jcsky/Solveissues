@@ -8,4 +8,8 @@ module ApplicationHelper
     "<span class=\"glyphicon glyphicon-#{name} flipy\"><span>".html_safe
   end
 
+  def login?
+    current_user != nil
+  end
+
 end

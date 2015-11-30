@@ -2,15 +2,10 @@ Rails.application.routes.draw do
 
   root 'issues#index'
   resources :issues do
-    resources :votes
     member do
-      get "/support" => 'votes#support_issue'
-      get "/unsupport" => 'votes#unsupport_issue'
+      post :like
     end
   end
-
-  # get 'support' => 'votes#create', :as => :support
-  # delete 'unsupport' => 'votes#destroy', :as => :unsupport
 
   devise_for :users, :controllers => { :omniauth_callbacks => "users/omniauth_callbacks" }
   devise_scope :user do
@@ -26,7 +21,7 @@ Rails.application.routes.draw do
     end
   end
 
-  get 'agent_list' => 'votes#agent_list'
+  get 'agent_list' => 'users#agent_list'
 
   # for API
   scope :path => '/api/v1/', :module => "api_v1", :defaults => { :format => :json }, :as => 'v1' do

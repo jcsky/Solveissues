@@ -1,0 +1,44 @@
+<div class="container">
+  <div class="row">
+    <div class="col-xs-12 sky-header"><h2>目前民代總人數: <%= @total_agents.size %></h2></div>
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th>姓名</th>
+            <th>站你的議題</th>
+            <th>名聲 , like / dislike</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @agents.each do |agent| %>
+            <% if login? %>
+              <tr>
+                <td><%= render_user_name_link(agent) %></td>
+                <td>
+                  <%= User.same_issue_ids(agent, current_user).size %>
+                </td>
+                <td id = "agent-vote-<%= agent.id %>">
+                  <%= agent.reputation %>,
+                  <%= link_to "站聲", like_user_path(agent), :class=>"btn #{vote?(agent, 1)} btn-xs"%>｜
+                  <%= link_to "噓聲", dislike_user_path(agent), :class=>"btn #{vote?(agent, -1)} btn-xs"%>｜
+                  <%= link_to "觀察", unlike_user_path(agent)%>
+                </td>
+              </tr>
+            <% else %>
+            <tr>
+              <td><%= render_user_name_link(agent) %></td>
+              <td>0</td>
+              <td id = "agent-vote-<%= agent.id %>">
+                <%= agent.reputation %>,
+                <%= link_to "站聲", like_user_path(agent), :class=>"btn btn-default btn-xs"%>｜
+                <%= link_to "噓聲", dislike_user_path(agent), :class=>"btn btn-default btn-xs"%>｜
+                <%= link_to "觀察", unlike_user_path(agent)%>
+              </td>
+            </tr>
+            <% end %>
+          <% end %>
+        </tbody>
+      </table>
+  </div>
+  <%= paginate @agents %>
+</div>

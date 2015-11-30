@@ -1,0 +1,4 @@
+$("#like-<%= @issue.id %>").children('a').toggleClass('btn-primary');
+$("#like-<%= @issue.id %>").children('a').toggleClass('btn-default');
+
+$("#count-<%= @issue.id %>").children('i').html('<%= @issue.liked_users.count %>');

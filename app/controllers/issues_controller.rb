@@ -8,7 +8,13 @@ class IssuesController < ApplicationController
   def index
     @issues = Issue.all
     @q = @issues.ransack(params[:q])
-    @issues = @q.result(distinct: true).page(params[:page]).per(15)
+
+    if params[:tag]
+        @issues = Tag.find_by_name(params[:tag]).issues.page(params[:page]).per(15)
+    else
+        @issues = @q.result(distinct: true).page(params[:page]).per(15)
+    end
+
   end
 
   # GET /issues/1
@@ -57,6 +63,18 @@ class IssuesController < ApplicationController
   #   end
   # end
 
+  def like
+    @issue = Issue.find(params[:id])
+    current_user.toggle_like(@issue)
+
+    respond_to do |format|
+      format.html {
+        redirect_to :back
+      }
+      format.js
+    end
+  end
+
   # DELETE /issues/1
   # DELETE /issues/1.json
   # def destroy
@@ -83,7 +101,8 @@ class IssuesController < ApplicationController
       hash = []
       Tag.all.order('issue_count DESC').first(20).each do |x|
         weight = x.issue_count
-        hash << {text: x.name, weight: weight, link: "#"}
+        hash << { text: x.name, weight: weight, link: issues_path + '?tag=' + x.name  }
+                                                    # issues_path(:tag => x.name)
       end
       @tag_cloud = hash
     end

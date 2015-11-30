@@ -1,16 +1,32 @@
 <div class="container">
   <h1>
-    <%if @user.role == 1%>
-      "職稱"-<%=@user.name%>
-    <%else%>
-      <%=@user.name%>
-    <%end%>
-  </h1> 
+    <% if @user.agent? %>
+      <div class="col-xs-6">
+        "現職": <%= @user.name %>
+      </div>
+      <div class="col-xs-6 text-right">
+        <%= link_to "站聲", like_user_path(@user), :class=>"btn btn-default btn-xs", :id => "" %>
+        <%= link_to "噓聲", dislike_user_path(@user), :class=>"btn btn-default btn-xs", :id => "" %>
+        <%= link_to "觀察", unlike_user_path(@user), :class=>"btn btn-default btn-xs", :id => "" %>
+        <div class="fb-share-button" data-href="<%= user_path(@user) %>" data-layout="button_count"></div>
+      </div>
+    <% else %>
+      <%= @user.name %>
+    <% end %>
+  </h1>
 
-  <%if @user.role == 1%>
-    <div class="fb-share-button" data-href="<%=user_path(@user)%>" data-layout="button_count"></div>
-  
-    <div class="row history-chart">
+  <ul class="nav nav-tabs nav-justified">
+    <% if @user.agent? %>
+      <li role="presentation" class="active"><a href="#reputation">民聲 <span class="badge"><%= @user.reputation %></span></a></li>
+    <% end %>
+    <li role="presentation"><a href="#issues">支持議題 <span class="badge"><%= @user.like_issues.count %><span></span></a></li>
+    <li role="presentation"><a href="#agents">相關民代</a></li>
+    <li role="presentation"><a href="#messages">不河蟹留言版</a></li>
+  </ul>
+
+  <% if @user.agent? %>
+
+    <div class="row history-chart" id="reputation">
       <div class="col-xs-12 sky-header"><h2>歷史名聲紀錄</h2></div>
       <div class="col-xs-12">
         <div class="ct-chart ct-golden-section" id="chart1"></div>
@@ -30,73 +46,45 @@
 
     <div class="row">
 
-      <% if @user.role == 1 && @user == current_user %>
-        <div class="col-xs-12 sky-header"><h2>接觸的總人數: <%= @total_users.size %></h2></div>
-        <h1></h1>
-
-        <h3 class="text-center">地區分佈</h3>
-        <% country_hash = Hash.new %>
-        <% country_hash = return_total_user_country_hash(@total_users) %>
-        <% country_hash.each_key do |k| %>
-          <div class="col-xs-3">
-            <h5 class="text-center"><%= k %> : <%= country_hash[k] %></h5>
-          </div>
-          <div class="col-xs-9">
-            <div class="progress">
-            <%= p = (country_hash[k]*100/ @total_users.size ).to_i.to_s + "%" %>
-              <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: <%= p %>">
-                <span class="sr-only">40% Complete (success)</span>
-              </div>
-            </div>
-          </div>
-        <% end %>
+      <% if @user.agent? && @user == current_user %>
+          <%= render partial: "touched_users_distribution", locals: { :touched_user_ids => @touched_user_ids } %>
       <% end %>
     </div>
-  <%end%>
+  <% end %>
 
-  <div class="row">
-    <div class="col-xs-12 sky-header"><h2>支持的議題</h2></div>
-    <div class="col-xs-6">
-      <h3>議題名稱</h3>
-    </div>
-    <div class="col-xs-6 pull-left">
-      <h3>關注人數</h3>
-    </div>
+  <div class="row" id="issues">
+    <div class="col-xs-12 sky-header"><h2>支持 <%= @user_issues.size %> 項議題</h2></div>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th class="col-xs-7"><h4>議題</h4></th>
+          <th class="col-xs-2"><h4>人數</h4></th>
+          <th class="col-xs-3"> <%= link_to '建立新議題', new_issue_path, class: "btn btn-success" %></th>
+        </tr>
+      </thead>
+      <tbody>
+        <%= render partial: "common/issues_tbody", collection: @user_issues, as: :issue %>
+      </tbody>
+    </table>
   </div>
 
-  <div class="row">
-    <ul>
-      <div class="spacing"></div>
-      <% @user_issues.each do |issue| %>
-      <li class="col-xs-6"><%= link_to issue.title, issue_path(issue) %></li>
-      <li class="col-xs-6 pull-left"><%= issue.find_votes_for.size %></li>
-      <br>
-      <br>
-      <% end %>
-    </ul>
+  <div class="row" id="messages">
+    <!-- fb comments -->
+    <div class="col-xs-12 sky-header"><h2><%= @user.name %> 不河蟹留言區</h2></div>
+    <div id="fb-root"></div>
+    <%= content_tag :div, '', :class => "fb-comments", "data-href" => request.original_url, "data-numposts" => "10", "data-colorscheme" => "light", "date-width" => "100%" %>
   </div>
 
-  <div class="row">
-
-    <div class="col-xs-12 sky-header"><h2>相關的民代</h2></div>
-    <% @agents.each do |agent| %>
-    <!-- 需要排除votable_type = user -->
-      <% same_issues = agent.votes.select{ |i| @user_issues.map(&:id).include?(i.votable_id) && i.votable_type == "Issue" } %>
-      <% if same_issues.size > 0 %>
-        <div class="col-xs-2 text-center user-img">
-          <%= image_tag(agent.fb_image, :class => "w100p")%>
-
-          <p class = "user-name"><%= agent.name %></p>
-          <div class = "user-name">共同關注議題: <%= same_issues.size %></div>
-        </div>
-      <% end %>
-    <% end %>
-
+  <div class="row" id="agents">
+    <div class="col-xs-12 sky-header"><h2>相關的民代: <%= @touched_agents.size %></h2></div>
+    <%= render partial: "touched_agents_list", collection: @touched_agents, as: :agent %>
   </div>
   <br>
-  <div class="row">
-    <div class="col-md-2 col-md-push-5">
-    <%= link_to "回議題總覽",issues_path, :class => "btn btn-default" %>
+  <% if @user.agent? %>
+    <div class="row">
+      <div class="col-md-2 col-md-push-5">
+        <%= link_to "回民代列表",users_path, :class => "btn btn-default" %>
+      </div>
     </div>
-  </div>
+  <% end %>
 </div>
