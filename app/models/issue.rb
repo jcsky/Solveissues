@@ -1,4 +1,7 @@
 class Issue < ActiveRecord::Base
+  
+  has_attached_file :logo, styles: { medium: "300x300>", thumb: "100x100>" }, default_url: "/images/:style/missing.png"
+  validates_attachment_content_type :logo, content_type: /\Aimage\/.*\Z/
 
   has_many :taggings
   has_many :tags, :through => :taggings
@@ -31,6 +34,15 @@ class Issue < ActiveRecord::Base
 
   def liked_agents
     self.liked_users.where(:role =>1)
+  end
+
+  def owner_name
+    if self.owner
+      User.find(self.owner).name
+    else
+      "nil"
+    end
+    
   end
 
 end

@@ -25,9 +25,18 @@
     <%= f.label :description, "說明" %><br>
     <%= f.text_area :description, :class => "w100p form-control", :required => "required", :rows => 10 %>
   </div>
+
+  <div class="col-md-8 col-md-push-2 form-group">
+    <%=f.label :logo, "LOGO"%>
+    <%=f.file_field :logo%>
+
+    <% if @issue.logo.exists? %>
+      <%= check_box_tag "destroy_logo", "1" %> 刪除檔案
+    <% end %>
+  </div>
 <!--   <div class="field">
-    <%#= f.label :creator %><br>
-    <%#= f.text_field :creator %>
+    <%#= f.label :owner %><br>
+    <%#= f.text_field :owner %>
   </div> -->
   <div class="col-md-8 col-md-push-2 form-group">
     <%= f.submit "建立議題", :class => "btn btn-default" %>

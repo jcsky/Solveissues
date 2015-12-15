@@ -11,10 +11,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151115033704) do
+ActiveRecord::Schema.define(version: 20151211074205) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "agent_histories", force: :cascade do |t|
+    t.integer  "user_id",    null: false
+    t.date     "date",       null: false
+    t.integer  "likes",      null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "agent_histories", ["user_id"], name: "index_agent_histories_on_user_id", using: :btree
 
   create_table "election_records", force: :cascade do |t|
     t.integer  "user_id"
@@ -80,10 +90,14 @@ ActiveRecord::Schema.define(version: 20151115033704) do
   create_table "issues", force: :cascade do |t|
     t.string   "title"
     t.text     "description"
-    t.integer  "creator"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.integer  "owner"
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
     t.integer  "votes_count"
+    t.string   "logo_file_name"
+    t.string   "logo_content_type"
+    t.integer  "logo_file_size"
+    t.datetime "logo_updated_at"
   end
 
   create_table "latest_agent_votes", force: :cascade do |t|
@@ -104,6 +118,20 @@ ActiveRecord::Schema.define(version: 20151115033704) do
   end
 
   add_index "latest_issue_votes", ["user_id", "issue_id"], name: "index_latest_issue_votes_on_user_id_and_issue_id", using: :btree
+
+  create_table "records", force: :cascade do |t|
+    t.integer  "agent_id"
+    t.integer  "reputation"
+    t.integer  "user_like"
+    t.integer  "user_dislike"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+  end
+
+  add_index "records", ["agent_id"], name: "index_records_on_agent_id", using: :btree
+  add_index "records", ["reputation"], name: "index_records_on_reputation", using: :btree
+  add_index "records", ["user_dislike"], name: "index_records_on_user_dislike", using: :btree
+  add_index "records", ["user_like"], name: "index_records_on_user_like", using: :btree
 
   create_table "taggings", force: :cascade do |t|
     t.integer  "tag_id",     null: false
@@ -162,20 +190,5 @@ ActiveRecord::Schema.define(version: 20151115033704) do
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
   add_index "users", ["fb_uid"], name: "index_users_on_fb_uid", using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
-
-  create_table "votes", force: :cascade do |t|
-    t.integer  "votable_id"
-    t.string   "votable_type"
-    t.integer  "voter_id"
-    t.string   "voter_type"
-    t.boolean  "vote_flag"
-    t.string   "vote_scope"
-    t.integer  "vote_weight"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "votes", ["votable_id", "votable_type", "vote_scope"], name: "index_votes_on_votable_id_and_votable_type_and_vote_scope", using: :btree
-  add_index "votes", ["voter_id", "voter_type", "vote_scope"], name: "index_votes_on_voter_id_and_voter_type_and_vote_scope", using: :btree
 
 end

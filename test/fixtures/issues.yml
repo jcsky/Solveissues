@@ -3,9 +3,9 @@
 one:
   title: MyString
   description: MyText
-  creator: 
+  owner: 
 
 two:
   title: MyString
   description: MyText
-  creator: 
+  owner: 
