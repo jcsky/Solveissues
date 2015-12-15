@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
 
-  root 'issues#index'
+  root 'main#index'
   resources :issues do
     member do
       post :like

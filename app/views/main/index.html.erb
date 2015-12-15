@@ -1,0 +1,372 @@
+<header>
+  <div class="nav">
+    <div class="container">
+      <div class="col-md-3 col-xs-12 col-sm-4 brand">
+        <%= link_to image_tag('logo-white-horizontal.svg'), root_path %>
+      </div>
+      <div class="col-md-6 col-xs-12 col-sm-8 nav-bar">
+        <ul>
+          <li>
+            <%= link_to '我要提議', new_issue_path %>
+          </li>
+          <li>
+            <%= link_to '看議題', issues_path %>
+          </li>
+          <li>
+            <%= link_to '站聲民代', agent_list_path %>
+          </li>
+        </ul>
+      </div>
+      <div class="col-md-3 hidden-sm hidden-xs social">
+        <ul class="pull-right">
+          <li>
+            <% if current_user %>
+              <%= link_to user_path(current_user) do %>
+                <span class="fa-stack">
+                  <i class="fa fa-user fa-stack-2x"></i>
+                </span>
+              <% end %>
+            <% end %>
+          </li>
+          <li>
+            <a href="#">
+              <span class="fa-stack fa-lg">
+                <i class="fa fa-circle fa-stack-2x"></i>
+                <i class="fa fa-facebook fa-stack-1x fa-black"></i>
+              </span>
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <span class="fa-stack fa-lg">
+                <i class="fa fa-circle fa-stack-2x"></i>
+                <i class="fa fa-twitter fa-stack-1x fa-black"></i>
+              </span>
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <span class="fa-stack fa-lg">
+                <i class="fa fa-circle fa-stack-2x"></i>
+                <i class="fa fa-google-plus fa-stack-1x fa-black"></i>
+              </span>
+            </a>
+          </li>
+        </ul>
+      </div>
+      <div class="clearfix"></div>
+    </div>
+  </div>
+  <div class="empty100px"></div>
+  <div class="banner">
+    <div class="slogan">
+      <h2>讓你的聲音站出來</h2>
+      <p>人民與民代一起為台灣互站</p>
+    </div>
+    <div class="button">
+      <a href="#" class="btn btn-default">了解站聲</a>
+    </div>
+  </div>
+  <div class="empty100px"></div>
+  <div class="search-black-wrap"></div>
+  <div class="container search">
+    <div class="row">
+      <div class="col-md-5 col-xs-12">
+        <%= search_form_for @q do |f| %>
+        <div class="input-group">
+          <%= f.search_field :title_cont, :class => "form-control", :placeholder => "輸入您欲尋找議題" %>
+          <span class="input-group-btn">
+            <%= f.submit "搜尋", :class=>"btn btn-default" %>
+          </span>
+        </div>
+        <% end %>
+      </div>
+      <div class="col-md-5 col-xs-6 pull-right hidden-xs">
+        <div class="input-group">
+          <input type="text" class="form-control" placeholder="輸入您欲尋找民代">
+          <span class="input-group-btn">
+            <button class="btn btn-default" type="button">搜尋</button>
+          </span>
+        </div>
+      </div>
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</header>
+
+<div class="content">
+  <div id="top-issue">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6">
+          <%= link_to image_tag('sample-issue-img.jpg', :class => "issue-image", :id => "issue-image"), '/'%>
+        </div>
+        <div class="col-md-6">
+          <div class="title">
+            <ul>
+              <li class="head">熱門議題</li>
+              <li class="head-en">Hot issues</li>
+              <li class="times"><i></i><i>5 days</i></li>
+            </ul>
+            <div id="dot3">
+              <i></i><i></i><i></i>
+            </div>
+          </div>
+          <div class="content">
+            <a href="#">
+              <h3>
+                <%= Issue.first.title %>
+              </h3>
+            </a>
+            <p class="ch">
+              Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+            </p>
+            <p class="en">
+              Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xs-6 col-md-6 hidden-xs">
+          <div class="col-md-6">
+            <div id="talkbubble">
+              <%= link_to issue_path(Issue.first) do %>
+                <i class="fa fa-plus-circle"></i>
+              <% end %>
+              <div class="photo">
+                <% Issue.first.liked_agents.first(3).each do |a| %>
+                  <%= link_to image_tag(a.fb_image ,:class => "agent-photo", :id => "agent-image"), user_path(a) %>
+                <% end %>
+              </div>
+            </div>
+          </div>
+          <div class="col-xs-5 col-md-3 text-center">
+            <p>
+              <%= Issue.first.liked_agents.size %>
+            </p>
+          </div>
+          <div class="col-xs-7 col-md-3">
+            民代站聲
+          </div>
+        </div>
+        <div class="col-xs-12 col-md-6">
+          <div class="col-md-6">
+            <div id="talkbubble">
+              <% 6.times do %>
+                <i class="fa fa-male"></i>
+              <% end %>
+              <% 4.times do %>
+                  <i class="fa fa-male fa-blue"></i>
+              <% end %>
+            </div>
+          </div>
+          <div class="col-xs-5 col-md-3 text-center">
+            <p>
+              <%= Issue.first.liked_users.size %>
+            </p>
+          </div>
+          <div class="col-xs-7 col-md-3">
+            人民站聲
+          </div>
+        </div>
+      </div>
+      <div class="issue-button">
+        <ul>
+          <li>
+            <a href="#">
+              <div class="like">
+                <i class="fa fa-thumbs-o-up">
+                  <p>
+                    站
+                  </p>
+                </i>
+              </div>
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <div class="share">
+                <i class="fa fa-share">
+                  <p>
+                    分享
+                  </p>
+                </i>
+              </div>
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <div class="more">
+                <i class="fa fa-info">
+                  <p>
+                    更多
+                  </p>
+                </i>
+              </div>
+            </a>
+          </li>
+        </ul>
+      </div>
+      <div class="clearfix"></div>
+    </div>
+  </div>
+
+  <div id="agent">
+    <div class="container">
+      <div class="title">
+        <h3>
+          站聲民代
+          <span class="en">These people stand by you.</span>
+        </h3>
+        <div id="dot3">
+          <i></i><i></i><i></i>
+        </div>
+      </div>
+      <div class="agnet-image">
+        <div class="navigation">
+          <a class="prev">
+            <i class="fa fa-chevron-left"></i>
+          </a>
+          <a class="next">
+            <i class="fa fa-chevron-right"></i>
+          </a>
+        </div>
+        <div class="agent-carousel">
+          <% User.agents.first(8).each do |i| %>
+            <div>
+              <%= link_to image_tag(i.fb_image, :class => "agent-photo", :id => "agent-image" ), user_path(i) %>
+              <p>
+                <%= i.reputation %>
+              </p>
+              <p>人民站聲</p>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="hot-issues">
+    <div class="container">
+      <div class="title">
+        <h3>
+          最新議題
+          <span class="en">Latest News</span>
+          <span class="hidden-xs">
+            <%= link_to '從關鍵字找議題' , issues_path, :class => "btn btn-default" %>
+          </span>
+        </h3>
+        <div id="dot3">
+          <i></i><i></i><i></i>
+        </div>
+      </div>
+      <div class="issue-info">
+        <div class="navigation">
+          <a class="prev">
+            <i class="fa fa-chevron-left"></i>
+          </a>
+          <a class="next">
+            <i class="fa fa-chevron-right"></i>
+          </a>
+        </div>
+        <div class="issue-carousel">
+          <% Issue.first(8).each do |i| %>
+            <div class="content">
+              <div class="top">
+                <%= link_to image_tag('sample-issue-img.jpg', :class => "issue-image", :id => "issue-image"), issue_path(i) %>
+                <div class="description">
+                  <h4>
+                    <%= link_to i.title, issue_path(i) %>
+                  </h4>
+                  <% 6.times do %>
+                    <i class="fa fa-male"></i>
+                  <% end %>
+                  <% 4.times do %>
+                      <i class="fa fa-male fa-blue"></i>
+                  <% end %>
+                  <p>
+                    <%= i.liked_users.size %>
+                    <span>人民站聲</span>
+                  </p>
+                </div>
+              </div>
+              <div class="bottom">
+                <div class="row">
+                  <div class="col-xs-7">
+                    <% i.liked_agents.first(2).each do |a| %>
+                      <%= link_to image_tag(a.fb_image ,:class => "agent-photo", :id => "agent-image"), user_path(a) %>
+                    <% end %>
+                  </div>
+                  <div class="col-xs-5">
+                    <%= link_to issue_path(i) do %>
+                      <i class="fa fa-plus-circle"></i>
+                    <% end %>
+                    <p>
+                      ...<%= i.liked_agents.size %>
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      </div>
+      <div class="more-issues text-center">
+        <%= link_to '看更多議題' , issues_path, :class => "btn btn-default" %>
+      </div>
+    </div>
+  </div>
+
+  <div class="bottom-banner">
+    <div class="black-wrap"></div>
+    <div class="empty100px"></div>
+    <div class="text">
+      <h2>因為你的聲音，讓台灣不一樣</h2>
+      <p>為你自己站聲 也為台灣站聲</p>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="bottom-brand">
+    <%= link_to image_tag('logo-white-vertical.svg'), '/' %>
+  </div>
+  <div class="bottom-nav">
+    <ul>
+      <li><a href="#">網站地圖</a></li> |
+      <li><a href="#">加入我們</a></li> |
+      <li><a href="#">募集資金</a></li> |
+      <li><a href="#">關於站聲</a></li> |
+      <li><a href="#">聯絡站聲</a></li>
+    </ul>
+  </div>
+  <div class="bottom-social">
+    <ul>
+      <li>
+        <a href="#">
+          <span class="fa-stack fa-lg">
+            <i class="fa fa-circle fa-stack-2x"></i>
+            <i class="fa fa-facebook fa-stack-1x fa-blue"></i>
+          </span>
+        </a>
+      </li>
+      <li>
+        <a href="#">
+          <span class="fa-stack fa-lg">
+            <i class="fa fa-circle fa-stack-2x"></i>
+            <i class="fa fa-twitter fa-stack-1x fa-blue"></i>
+          </span>
+        </a>
+      </li>
+      <li>
+        <a href="#">
+          <span class="fa-stack fa-lg">
+            <i class="fa fa-circle fa-stack-2x"></i>
+            <i class="fa fa-google-plus fa-stack-1x fa-blue"></i>
+          </span>
+        </a>
+      </li>
+    </ul>
+  </div>
+</footer>

@@ -1,12 +1,23 @@
 <% if login? %>
   <tr>
-    <td><%= render_issue_name_link(issue) %></td>
+    <td>
+      <%= render_issue_name_link(issue) %>
+      <%if issue.owner == current_user.id%>
+        <span class="owner-tag">Owner</span>
+      <%end%>
+    </td>
     <td id="count-<%= issue.id %>"><i><%= issue.liked_users.size %></i></td>
     <td>
       <div id="like-<%= issue.id %>" class="text-align">
         <%= render_issue_like_botton(issue) %>
+        <%if issue.owner == current_user.id%>
+          <%= link_to "Edit", edit_issue_path(issue), :class =>"btn btn-info"%>
+        <%end%>
       </div>
     </td>
+
+    
+    
   </tr>
 <% else %>
   <tr>

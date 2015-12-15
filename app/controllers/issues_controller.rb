@@ -39,6 +39,7 @@ class IssuesController < ApplicationController
     @issue = current_user.issues.new(issue_params)
     respond_to do |format|
       if @issue.save
+        current_user.toggle_like(@issue)
         # @issue.votes.create(:user_id => current_user.id)
         format.html { redirect_to @issue, notice: 'Issue was successfully created.' }
         format.json { render :show, status: :created, location: @issue }
@@ -49,19 +50,25 @@ class IssuesController < ApplicationController
     end
   end
 
+  def update
+    if params[:destroy_logo] == "1"
+      @issue.logo = nil
+    end
+  end
+
   # PATCH/PUT /issues/1
   # PATCH/PUT /issues/1.json
-  # def update
-  #   respond_to do |format|
-  #     if @issue.update(issue_params)
-  #       format.html { redirect_to @issue, notice: 'Issue was successfully updated.' }
-  #       format.json { render :show, status: :ok, location: @issue }
-  #     else
-  #       format.html { render :edit }
-  #       format.json { render json: @issue.errors, status: :unprocessable_entity }
-  #     end
-  #   end
-  # end
+  def update
+    respond_to do |format|
+      if @issue.update(issue_params)
+        format.html { redirect_to @issue, notice: 'Issue was successfully updated.' }
+        format.json { render :show, status: :ok, location: @issue }
+      else
+        format.html { render :edit }
+        format.json { render json: @issue.errors, status: :unprocessable_entity }
+      end
+    end
+  end
 
   def like
     @issue = Issue.find(params[:id])
@@ -93,7 +100,7 @@ class IssuesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def issue_params
-      params.require(:issue).permit(:title, :description, :creator, :tag_list => [])
+      params.require(:issue).permit(:title, :description, :logo, :owner, :tag_list => [])
     end
 
     def tag_cloud

@@ -6,7 +6,17 @@
           <tr>
             <th>姓名</th>
             <th>站你的議題</th>
-            <th>名聲 , like / dislike</th>
+            <th>
+              <%= link_to agent_list_path(:sort => "reputation"), :class =>"btn btn-default" do%>
+                <i class="fa fa-line-chart">名聲</i>
+              <%end%>
+              <%= link_to agent_list_path(:sort => "user_like"), :class =>"btn btn-default" do%>
+                <i class="fa fa-thumbs-up">Like</i>
+              <%end%>
+              <%= link_to agent_list_path(:sort => "user_dislike"), :class =>"btn btn-default" do%>
+                <i class="fa fa-thumbs-down">Dislike</i>
+              <%end%>
+            </th>
           </tr>
         </thead>
         <tbody>
@@ -19,8 +29,8 @@
                 </td>
                 <td id = "agent-vote-<%= agent.id %>">
                   <%= agent.reputation %>,
-                  <%= link_to "站聲", like_user_path(agent), :class=>"btn #{vote?(agent, 1)} btn-xs"%>｜
-                  <%= link_to "噓聲", dislike_user_path(agent), :class=>"btn #{vote?(agent, -1)} btn-xs"%>｜
+                  <%= link_to "站聲(#{agent.user_like_count})", like_user_path(agent), :class=>"btn #{vote?(agent, 1)} btn-xs"%>｜
+                  <%= link_to "噓聲(#{agent.user_dislike_count})", dislike_user_path(agent), :class=>"btn #{vote?(agent, -1)} btn-xs"%>｜
                   <%= link_to "觀察", unlike_user_path(agent)%>
                 </td>
               </tr>
@@ -30,8 +40,8 @@
               <td>0</td>
               <td id = "agent-vote-<%= agent.id %>">
                 <%= agent.reputation %>,
-                <%= link_to "站聲", like_user_path(agent), :class=>"btn btn-default btn-xs"%>｜
-                <%= link_to "噓聲", dislike_user_path(agent), :class=>"btn btn-default btn-xs"%>｜
+                <%= link_to "站聲(#{agent.user_like_count})", like_user_path(agent), :class=>"btn btn-default btn-xs"%>｜
+                <%= link_to "噓聲(#{agent.user_dislike_count})", dislike_user_path(agent), :class=>"btn btn-default btn-xs"%>｜
                 <%= link_to "觀察", unlike_user_path(agent)%>
               </td>
             </tr>

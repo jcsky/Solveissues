@@ -24,8 +24,14 @@ class UsersController < ApplicationController
 
   # Pages
   def agent_list
+    User.record_count
     @total_agents = User.agents
     @agents = @total_agents.page(params[:page]).per(10)
+
+    if params[:sort] 
+      sort = "records.#{params[:sort]} DESC"
+      @agents = @total_agents.includes(:record).order(sort).page(params[:page]).per(10)
+    end
   end
 
 private

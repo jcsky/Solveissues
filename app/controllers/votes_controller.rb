@@ -2,6 +2,7 @@ class VotesController < ApplicationController
 
   before_action :authenticate_user!
   before_action :find_latest_agent_vote, only: [:like_user, :dislike_user, :unlike_user]
+  before_action :find_agent, only: [:like_user, :dislike_user, :unlike_user]
 
   def create
     set_issue
@@ -94,6 +95,10 @@ private
   def find_latest_agent_vote
     @agent = User.find(params[:id])
     @latest_agent_vote = LatestAgentVote.find_by(:agent_id=>@agent.id, :user_id=>current_user.id)
+  end
+
+  def find_agent
+    @agent = User.find(params[:id])
   end
 
 end

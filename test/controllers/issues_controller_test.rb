@@ -18,7 +18,7 @@ class IssuesControllerTest < ActionController::TestCase
 
   test "should create issue" do
     assert_difference('Issue.count') do
-      post :create, issue: { creator: @issue.creator, description: @issue.description, title: @issue.title }
+      post :create, issue: { owner: @issue.owner, description: @issue.description, title: @issue.title }
     end
 
     assert_redirected_to issue_path(assigns(:issue))
@@ -35,7 +35,7 @@ class IssuesControllerTest < ActionController::TestCase
   end
 
   test "should update issue" do
-    patch :update, id: @issue, issue: { creator: @issue.creator, description: @issue.description, title: @issue.title }
+    patch :update, id: @issue, issue: { owner: @issue.owner, description: @issue.description, title: @issue.title }
     assert_redirected_to issue_path(assigns(:issue))
   end
 

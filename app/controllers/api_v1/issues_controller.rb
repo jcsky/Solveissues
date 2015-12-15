@@ -12,7 +12,7 @@ class ApiV1::IssuesController < ApiController
   def create
     @issue = Issue.new( title: params[:title],
                         description: params[:discription],
-                        creator: params[:authentication_token]
+                        owner: params[:authentication_token]
       )
     user = User.find_by_id(params[:authentication_token])
 

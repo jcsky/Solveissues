@@ -15,3 +15,13 @@
  *= require adminlte
  *= require skin-blue
  */
+
+
+@import "customized";
+@import "issues";
+@import "users";
+@import "font-awesome";
+
+#nav-logo {
+  width: 200px;
+}

@@ -48,7 +48,7 @@ end
 puts '產生議題資料'
 issues = CSV.read("config/demoissues.csv")
 issues[1..issues.length].each do |row|
-  issue = Issue.create(title: row[0], description: row[1], creator: User.all.sample)
+  issue = Issue.create(title: row[0], description: row[1], owner: User.all.sample)
 end
 
 puts '產生標籤'
