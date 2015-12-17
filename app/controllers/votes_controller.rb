@@ -65,7 +65,7 @@ class VotesController < ApplicationController
     else
       LatestAgentVote.create(:agent_id=>@agent.id, :user_id=>current_user.id, :value => 1)
     end
-    redirect_to agent_list_path
+    redirect_to agent_list_path(:page => params[:page])
   end
 
   def dislike_user
@@ -75,7 +75,8 @@ class VotesController < ApplicationController
     else
       LatestAgentVote.create(:agent_id=>@agent.id, :user_id=>current_user.id, :value => -1)
     end
-    redirect_to agent_list_path
+    
+    redirect_to agent_list_path(:page => params[:page])
   end
 
   def unlike_user
@@ -83,7 +84,7 @@ class VotesController < ApplicationController
       @latest_agent_vote.destroy
     end
 
-    redirect_to agent_list_path
+    redirect_to agent_list_path(:page => params[:page])
   end
 
 private

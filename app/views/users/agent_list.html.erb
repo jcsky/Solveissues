@@ -29,9 +29,9 @@
                 </td>
                 <td id = "agent-vote-<%= agent.id %>">
                   <%= agent.reputation %>,
-                  <%= link_to "站聲(#{agent.user_like_count})", like_user_path(agent), :class=>"btn #{vote?(agent, 1)} btn-xs"%>｜
-                  <%= link_to "噓聲(#{agent.user_dislike_count})", dislike_user_path(agent), :class=>"btn #{vote?(agent, -1)} btn-xs"%>｜
-                  <%= link_to "觀察", unlike_user_path(agent)%>
+                  <%= link_to "站聲(#{agent.user_like_count})", like_user_path(agent, :page => params[:page]), :class=>"btn #{vote?(agent, 1)} btn-xs"%>｜
+                  <%= link_to "噓聲(#{agent.user_dislike_count})", dislike_user_path(agent,:page => params[:page]), :class=>"btn #{vote?(agent, -1)} btn-xs"%>｜
+                  <%= link_to "觀察", unlike_user_path(agent,:page => params[:page])%>
                 </td>
               </tr>
             <% else %>
@@ -40,9 +40,9 @@
               <td>0</td>
               <td id = "agent-vote-<%= agent.id %>">
                 <%= agent.reputation %>,
-                <%= link_to "站聲(#{agent.user_like_count})", like_user_path(agent), :class=>"btn btn-default btn-xs"%>｜
-                <%= link_to "噓聲(#{agent.user_dislike_count})", dislike_user_path(agent), :class=>"btn btn-default btn-xs"%>｜
-                <%= link_to "觀察", unlike_user_path(agent)%>
+                <%= link_to "站聲(#{agent.user_like_count})", like_user_path(agent,:page => params[:page]), :class=>"btn btn-default btn-xs"%>｜
+                <%= link_to "噓聲(#{agent.user_dislike_count})", dislike_user_path(agent,:page => params[:page]), :class=>"btn btn-default btn-xs"%>｜
+                <%= link_to "觀察", unlike_user_path(agent,:page => params[:page])%>
               </td>
             </tr>
             <% end %>
