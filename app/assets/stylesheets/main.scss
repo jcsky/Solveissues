@@ -46,6 +46,114 @@ img:hover {
   filter: opacity(50%);
 }
 
+#admin-header{
+  position: relative;
+  background-position: center center;
+  background-size: cover;
+
+  height: 550px;
+  color: $white;
+  .container {
+    margin-top: 30px;
+    .brand {
+      width: 200px;
+    }
+  }
+  .nav-bar {
+    text-align: center;
+    left: 0;
+
+    ul {
+      padding: 5px;
+      li {
+        list-style: none;
+        display: inline-block;
+        padding: 0 15px;
+        a {
+          color: $white;
+          font-size: 1.5em;
+          font-weight: 500;
+        }
+        a:hover {
+          color: $blue;
+          text-decoration: none;
+        }
+      }
+    }
+  }
+  .social {
+    ul {
+      padding: 5px;
+      li:first-child {
+        margin: 5px;
+      }
+      li {
+        list-style: none;
+        display: inline-block;
+        a {
+          // color: $white;
+          color: inherit;
+          font-size: 0.8em;
+          .fa-black {
+            color: black;
+          }
+        }
+        a:hover {
+          color: $blue;
+          .fa-black {
+            color: white;
+          }
+        }
+      }
+    }
+  }
+  .search-black-wrap {
+    position: absolute;
+    width: 100%;
+    height: 80px;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);;
+  }
+  .search {
+    margin-top: 50px;
+    .btn {
+      background: $blue;
+      color: $white;
+    }
+    .btn:active {
+      background: $white;
+    }
+    .btn:hover {
+      background: $light-blue;
+    }
+  }
+  .banner {
+    text-align: center;
+    color: $white;
+    .slogan {
+      h2 {
+        font-size: 3em;
+      }
+      p {
+        font-size: 1.4em;
+      }
+    }
+    .button {
+      margin-top: 20px;
+      .btn {
+        background: rgba(0, 0, 0, 0);
+        color: $white;
+        font-size: 1.2em;
+        border: 2px solid #fff;
+        width: 150px;
+      }
+      .btn:hover {
+        background: $blue;
+      }
+    }
+  }
+}
+
 header {
   position: relative;
   background-image: image_url('banner1.jpg');

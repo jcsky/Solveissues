@@ -17,6 +17,7 @@
 //= require select2
 //= require jqcloud-1.0.4
 //= require fb_comment
+//= require adminlte
 //= require owl.carousel
 //= require_tree .
 $(document).ready(function() {
