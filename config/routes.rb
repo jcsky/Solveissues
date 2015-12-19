@@ -1,6 +1,9 @@
 Rails.application.routes.draw do
 
   root 'main#index'
+  get 'agent_list' => 'users#agent_list'
+
+
   resources :issues do
     member do
       post :like
@@ -19,8 +22,6 @@ Rails.application.routes.draw do
       get "/dislike" => 'votes#dislike_user'
     end
   end
-
-  get 'agent_list' => 'users#agent_list'
 
   namespace :admin do
     resources :users

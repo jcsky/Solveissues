@@ -1,7 +1,7 @@
 class VotesController < ApplicationController
 
   before_action :authenticate_user!
-  before_action :find_latest_agent_vote, only: [:like_user, :dislike_user, :unlike_user]
+  before_action :find_agent_vote, only: [:like_user, :dislike_user, :unlike_user]
   before_action :find_agent, only: [:like_user, :dislike_user, :unlike_user]
 
   def create
@@ -59,29 +59,29 @@ class VotesController < ApplicationController
   # user_voted_to_agent
 
   def like_user
-    if @latest_agent_vote
-      @latest_agent_vote.value = 1
-      @latest_agent_vote.save
+    if @agent_vote
+      @agent_vote.value = 1
+      @agent_vote.save
     else
-      LatestAgentVote.create(:agent_id=>@agent.id, :user_id=>current_user.id, :value => 1)
+      AgentVote.create(:agent_id=>@agent.id, :user_id=>current_user.id, :value => 1)
     end
     redirect_to agent_list_path(:page => params[:page])
   end
 
   def dislike_user
-    if @latest_agent_vote
-      @latest_agent_vote.value = -1
-      @latest_agent_vote.save
+    if @agent_vote
+      @agent_vote.value = -1
+      @agent_vote.save
     else
-      LatestAgentVote.create(:agent_id=>@agent.id, :user_id=>current_user.id, :value => -1)
+      AgentVote.create(:agent_id=>@agent.id, :user_id=>current_user.id, :value => -1)
     end
-    
+
     redirect_to agent_list_path(:page => params[:page])
   end
 
   def unlike_user
-    if @latest_agent_vote
-      @latest_agent_vote.destroy
+    if @agent_vote
+      @agent_vote.destroy
     end
 
     redirect_to agent_list_path(:page => params[:page])
@@ -93,9 +93,9 @@ private
     @issue = Issue.find(params[:issue_id])
   end
 
-  def find_latest_agent_vote
+  def find_agent_vote
     @agent = User.find(params[:id])
-    @latest_agent_vote = LatestAgentVote.find_by(:agent_id=>@agent.id, :user_id=>current_user.id)
+    @agent_vote = AgentVote.find_by(:agent_id=>@agent.id, :user_id=>current_user.id)
   end
 
   def find_agent
