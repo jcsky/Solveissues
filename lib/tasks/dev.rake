@@ -2,31 +2,20 @@ namespace :dev do
 
   country = %w[台北市 基隆市 新北市 連江縣 宜蘭縣 新竹市 新竹縣 桃園縣 苗栗縣 台中市 彰化縣 南投縣 嘉義市 嘉義縣 雲林縣 台南市 高雄市 澎湖縣 金門縣 屏東縣 台東縣 花蓮縣]
   usrenames = %w[零加隆 王晶平 馬一九 無思哇 花媽 沒勝文 扁扁 賴德德 波多野結衣 志玲姐姐 陳小刀 賭神 賭聖 習老大 喔爸爸 東拉蕊 吳中憲]
-
+  history_days = 7
 
   task :test_db_rebuild => ['db:drop:all', 'db:create', 'db:migrate', 'db:seed', 'dev:mass_user', 'dev:user_vote', 'dev:issue_votes', 'dev:agent_votes', 'dev:random_tagging']
 
   task :random_tagging => :environment do
-    Tagging.delete_all
+    IssueTag.delete_all
     puts "隨機標籤"
     Issue.all.each do |x|
       tagging = [*1..17].sample(1 +  Random.rand(4))
       tagging.each do |i|
-        x.taggings.create(:tag_id => i )
+        x.issue_tags.create(:tag_id => i )
       end
     end
   end
-
-  #task :agent_history => :environment do
-  #  puts "產生一個月名聲紀錄"
-  #  AgentHistory.delete_all
-  #  agents = User.where(:role => 1)
-  #  agents.each do |x|
-  #    30.times do |i|
-  #      history_data = AgentHistory.create(:user_id => x.id, :date => i.days.ago, :likes => Faker::Number.number(3))
-  #    end
-  #  end
-  #end
 
   # OK
   task :mass_user => :environment do
@@ -85,8 +74,8 @@ namespace :dev do
   end
 
   task :issue_votes => :environment do
-    puts "開始'假'投票（議題）"
-    LatestIssueVote.destroy_all
+    puts "每個user在過去#{history_days}天向兩個議題投票"
+    IssueVote.destroy_all
     HistoricalIssueVote.destroy_all
 
     issue = []
@@ -98,13 +87,12 @@ namespace :dev do
 
     time = Time.now.to_s(:db)
     inserts0 = []
-    d = 30
-    30.times do
+    d = history_days
+    history_days.times do
 
-    time_date = d.day.ago.strftime("%Y-%m-%d")
-    d -= 1
-    inserts = []
-    puts "每個user在#{time_date}向兩個議題投票"
+      time_date = d.day.ago.strftime("%Y-%m-%d")
+      d -= 1
+      inserts = []
       User.all.each do |u|
         User.transaction do
           issue.sample(2).each do |i|
@@ -120,23 +108,21 @@ namespace :dev do
         end
       end
 
-    inserts0 += inserts
+      inserts0 += inserts
 
-    sql = "INSERT INTO latest_issue_votes (issue_id, user_id, created_at, updated_at) VALUES #{inserts.join(", ")}"
-    begin
-      CONN.execute sql
-      puts '成功！'
-    rescue
-      puts '失敗！'
-    end
+      sql = "INSERT INTO issue_votes (issue_id, user_id, created_at, updated_at) VALUES #{inserts.join(", ")}"
+      begin
+        CONN.execute sql
+      rescue
+        puts '失敗！'
+      end
 
-    inserts2 = []
-    puts "建立歷史投票記錄"
+      inserts2 = []
 
       Issue.all.each do |i|
         Issue.transaction do
           yes_user = []
-          LatestIssueVote.where(:issue_id=>i.id).each do |liv|
+          IssueVote.where(:issue_id=>i.id).each do |liv|
             yes_user.push(liv.user_id)
           end
           inserts2.push %Q{('#{i.id}', '#{yes_user.count}', '#{yes_user}', '#{time_date}', '#{time}', '#{time}')}
@@ -147,7 +133,6 @@ namespace :dev do
 
       begin
         CONN.execute sql2
-        puts '成功！！'
       rescue
         puts '失敗'
       end
@@ -156,8 +141,8 @@ namespace :dev do
   end
 
   task :agent_votes => :environment do
-    puts "開始'假'投票（民代）"
-    LatestAgentVote.destroy_all
+    puts "每個user在過去#{history_days}天向三個立委投票"
+    AgentVote.destroy_all
     HistoricalAgentVote.destroy_all
 
     CONN = ActiveRecord::Base.connection
@@ -171,15 +156,12 @@ namespace :dev do
 
     @agents = User.where(:role => 1)
 
-    d = 30
+    d = history_days
     inserts0 = []
-
-    30.times do
+    history_days.times do
       inserts = []
       time_date = d.day.ago.strftime("%Y-%m-%d")
       d -= 1
-      puts "每個user在#{time_date}向三個立委投票"
-
       User.all.each do |u|
         User.transaction do
           agent.sample(3).each do |i|
@@ -194,26 +176,24 @@ namespace :dev do
       end
 
       inserts0 += inserts
-      sql = "INSERT INTO latest_agent_votes (agent_id, user_id, value, created_at, updated_at) VALUES #{inserts.join(", ")}"
+      sql = "INSERT INTO agent_votes (agent_id, user_id, value, created_at, updated_at) VALUES #{inserts.join(", ")}"
 
       begin
         CONN.execute sql
-        puts '成功！'
       rescue
         puts '失敗！'
       end
 
       inserts2 = []
-      puts "建立歷史投票記錄"
       @agents.each do |agent|
         yes_user = []
         no_user = []
 
-        LatestAgentVote.where(:agent_id=>agent.id, :value=>1).each do |lav|
+        AgentVote.where(:agent_id=>agent.id, :value=>1).each do |lav|
             yes_user.push(lav.user_id)
         end
 
-        LatestAgentVote.where(:agent_id=>agent.id, :value=>-1).each do |lav|
+        AgentVote.where(:agent_id=>agent.id, :value=>-1).each do |lav|
             no_user.push(lav.user_id)
         end
 
@@ -224,7 +204,6 @@ namespace :dev do
 
       begin
         CONN.execute sql2
-        puts '成功！！'
       rescue
         puts '失敗'
       end
@@ -241,7 +220,7 @@ namespace :dev do
 
     Issue.all.each do |i|
       yes_user = []
-      LatestIssueVote.where(:issue_id=>i.id).each do |liv|
+      IssueVote.where(:issue_id=>i.id).each do |liv|
         yes_user.push(liv.user_id)
       end
 
@@ -266,10 +245,10 @@ namespace :dev do
     @agents.each do |agent|
       yes_user = []
       no_user = []
-      LatestAgentVote.where(:agent_id=>agent.id, :value=>1).each do |lav|
+      AgentVote.where(:agent_id=>agent.id, :value=>1).each do |lav|
         yes_user.push(lav.user_id)
       end
-      LatestAgentVote.where(:agent_id=>agent.id, :value=>-1).each do |lav|
+      AgentVote.where(:agent_id=>agent.id, :value=>-1).each do |lav|
         no_user.push(lav.user_id)
       end
 

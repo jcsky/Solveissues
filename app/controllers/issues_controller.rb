@@ -6,15 +6,14 @@ class IssuesController < ApplicationController
   # GET /issues
   # GET /issues.json
   def index
-    @issues = Issue.all
-    @q = @issues.ransack(params[:q])
+    @q = Issue.ransack(params[:q])
 
     if params[:tag]
         @issues = Tag.find_by_name(params[:tag]).issues.page(params[:page]).per(15)
     else
         @issues = @q.result(distinct: true).page(params[:page]).per(15)
     end
-
+    @issues.includes(:liked_users)
   end
 
   # GET /issues/1

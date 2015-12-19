@@ -1,4 +1,4 @@
-class LatestAgentVote < ActiveRecord::Base
+class AgentVote < ActiveRecord::Base
   belongs_to :user
   belongs_to :agent, :class_name => "User"
 end

@@ -11,10 +11,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151211074205) do
+ActiveRecord::Schema.define(version: 20151213004520) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "agent_votes", force: :cascade do |t|
+    t.integer  "value"
+    t.integer  "user_id"
+    t.integer  "agent_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "agent_votes", ["user_id", "agent_id"], name: "index_agent_votes_on_user_id_and_agent_id", using: :btree
 
   create_table "election_records", force: :cascade do |t|
     t.integer  "user_id"
@@ -77,6 +87,25 @@ ActiveRecord::Schema.define(version: 20151211074205) do
 
   add_index "information", ["user_id"], name: "index_information_on_user_id", using: :btree
 
+  create_table "issue_tags", force: :cascade do |t|
+    t.integer  "tag_id",     null: false
+    t.integer  "issue_id",   null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "issue_tags", ["issue_id"], name: "index_issue_tags_on_issue_id", using: :btree
+  add_index "issue_tags", ["tag_id"], name: "index_issue_tags_on_tag_id", using: :btree
+
+  create_table "issue_votes", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "issue_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "issue_votes", ["user_id", "issue_id"], name: "index_issue_votes_on_user_id_and_issue_id", using: :btree
+
   create_table "issues", force: :cascade do |t|
     t.string   "title"
     t.text     "description"
@@ -89,25 +118,6 @@ ActiveRecord::Schema.define(version: 20151211074205) do
     t.integer  "logo_file_size"
     t.datetime "logo_updated_at"
   end
-
-  create_table "latest_agent_votes", force: :cascade do |t|
-    t.integer  "value"
-    t.integer  "user_id"
-    t.integer  "agent_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  add_index "latest_agent_votes", ["user_id", "agent_id"], name: "index_latest_agent_votes_on_user_id_and_agent_id", using: :btree
-
-  create_table "latest_issue_votes", force: :cascade do |t|
-    t.integer  "user_id"
-    t.integer  "issue_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  add_index "latest_issue_votes", ["user_id", "issue_id"], name: "index_latest_issue_votes_on_user_id_and_issue_id", using: :btree
 
   create_table "records", force: :cascade do |t|
     t.integer  "agent_id"
@@ -122,16 +132,6 @@ ActiveRecord::Schema.define(version: 20151211074205) do
   add_index "records", ["reputation"], name: "index_records_on_reputation", using: :btree
   add_index "records", ["user_dislike"], name: "index_records_on_user_dislike", using: :btree
   add_index "records", ["user_like"], name: "index_records_on_user_like", using: :btree
-
-  create_table "taggings", force: :cascade do |t|
-    t.integer  "tag_id",     null: false
-    t.integer  "issue_id",   null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  add_index "taggings", ["issue_id"], name: "index_taggings_on_issue_id", using: :btree
-  add_index "taggings", ["tag_id"], name: "index_taggings_on_tag_id", using: :btree
 
   create_table "tags", force: :cascade do |t|
     t.string   "name",                    null: false

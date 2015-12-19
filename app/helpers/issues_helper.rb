@@ -6,7 +6,7 @@ module IssuesHelper
   end
 
   def render_issue_like_botton(issue)
-    if issue.like_by_user?(current_user)
+    if issue.liked_by_user?(current_user)
       link_to like_issue_path(issue), method: :post, class: "btn btn-primary", id: "like-#{issue.id}", remote: true do
         content_tag :span, '', class: "glyphicon glyphicon-thumbs-up"
       end

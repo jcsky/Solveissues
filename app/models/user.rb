@@ -6,10 +6,10 @@ class User < ActiveRecord::Base
          :omniauthable, :omniauth_providers => [:facebook]
 
   # Liked issues of user
-  has_many :latest_issue_votes, dependent: :destroy
-  has_many :like_issues, through: :latest_issue_votes, source: :issue, dependent: :destroy
-  has_many :latest_agent_votes, :dependent => :destroy
-  has_many :vote_to_agents, :through => :latest_agent_votes, :source => :agent
+  has_many :issue_votes, dependent: :destroy
+  has_many :like_issues, through: :issue_votes, source: :issue, dependent: :destroy
+  has_many :agent_votes, :dependent => :destroy
+  has_many :vote_to_agents, :through => :agent_votes, :source => :agent
   has_many :election_records
   has_many :issues, :foreign_key => "owner"
   has_one :information, :dependent => :destroy
@@ -49,8 +49,8 @@ class User < ActiveRecord::Base
   def self.record_count
     User.agents.each do |agent|
       record = Record.find_by_agent_id(agent.id) || Record.create(:agent_id => agent.id)
-      rep_yes = LatestAgentVote.where(:agent_id => agent.id, :value => 1).count
-      rep_no = LatestAgentVote.where(:agent_id => agent.id, :value => -1).count
+      rep_yes = AgentVote.where(:agent_id => agent.id, :value => 1).count
+      rep_no = AgentVote.where(:agent_id => agent.id, :value => -1).count
       record.update(:user_like => rep_yes)
       record.update(:user_dislike => rep_no)
       record.update(:reputation => rep_yes - rep_no)

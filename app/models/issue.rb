@@ -1,22 +1,26 @@
 class Issue < ActiveRecord::Base
-  
+
   has_attached_file :logo, styles: { medium: "300x300>", thumb: "100x100>" }, default_url: "/images/:style/missing.png"
   validates_attachment_content_type :logo, content_type: /\Aimage\/.*\Z/
 
-  has_many :taggings
-  has_many :tags, :through => :taggings
+  has_many :issue_tags
+  has_many :tags, :through => :issue_tags
 
   belongs_to :user
 
   # Liked by users
-  has_many :latest_issue_votes, dependent: :destroy
-  has_many :liked_users, through: :latest_issue_votes, source: :user, dependent: :destroy
+  has_many :issue_votes, dependent: :destroy
+  has_many :liked_users, through: :issue_votes, source: :user, dependent: :destroy
+
+  def liked_users_count
+    self.liked_users.size
+  end
 
   def find_vote_by_user(user)
     self.votes.where(user_id: user.id).first
   end
 
-  def like_by_user?(user)
+  def liked_by_user?(user)
     self.liked_users.include?(user)
   end
 
@@ -42,7 +46,7 @@ class Issue < ActiveRecord::Base
     else
       "nil"
     end
-    
+
   end
 
 end

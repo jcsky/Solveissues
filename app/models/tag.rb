@@ -1,4 +1,4 @@
 class Tag < ActiveRecord::Base
-  has_many :taggings
-  has_many :issues, :through => :taggings
+  has_many :issue_tags
+  has_many :issues, :through => :issue_tags
 end

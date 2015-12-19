@@ -115,7 +115,7 @@
           <div class="content">
             <a href="#">
               <h3>
-                <%= Issue.first.title %>
+                <%= @hot_issue.title %>
               </h3>
             </a>
             <p class="ch">
@@ -131,11 +131,11 @@
         <div class="col-xs-6 col-md-6 hidden-xs">
           <div class="col-md-6">
             <div id="talkbubble">
-              <%= link_to issue_path(Issue.first) do %>
+              <%= link_to issue_path(@hot_issue) do %>
                 <i class="fa fa-plus-circle"></i>
               <% end %>
               <div class="photo">
-                <% Issue.first.liked_agents.first(3).each do |a| %>
+                <% @hot_issue.liked_agents.first(3).each do |a| %>
                   <%= link_to image_tag(a.fb_image ,:class => "agent-photo", :id => "agent-image"), user_path(a) %>
                 <% end %>
               </div>
@@ -143,7 +143,7 @@
           </div>
           <div class="col-xs-5 col-md-3 text-center">
             <p>
-              <%= Issue.first.liked_agents.size %>
+              <%= @hot_issue.liked_agents.size %>
             </p>
           </div>
           <div class="col-xs-7 col-md-3">
@@ -163,7 +163,7 @@
           </div>
           <div class="col-xs-5 col-md-3 text-center">
             <p>
-              <%= Issue.first.liked_users.size %>
+              <%= @hot_issue.liked_users.size %>
             </p>
           </div>
           <div class="col-xs-7 col-md-3">
