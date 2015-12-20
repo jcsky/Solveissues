@@ -39,6 +39,8 @@ group :development do
   gem 'binding_of_caller'
 
   gem 'traceroute'
+  gem 'rack-mini-profiler', require: false
+  gem 'bullet'
 end
 
 group :development, :test do
