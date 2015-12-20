@@ -3,8 +3,6 @@ class IssuesController < ApplicationController
  before_action :set_issue, only: [:show, :edit, :update, :destroy]
  before_action :tag_cloud, only: [:index]
 
-  # GET /issues
-  # GET /issues.json
   def index
     @q = Issue.ransack(params[:q])
 
@@ -16,23 +14,17 @@ class IssuesController < ApplicationController
     @issues.includes(:liked_users)
   end
 
-  # GET /issues/1
-  # GET /issues/1.json
   def show
   end
 
-  # GET /issues/new
   def new
     authenticate_user!
     @issue = Issue.new
   end
 
-  # GET /issues/1/edit
   def edit
   end
 
-  # POST /issues
-  # POST /issues.json
   def create
     authenticate_user!
     @issue = current_user.issues.new(issue_params)
@@ -55,8 +47,6 @@ class IssuesController < ApplicationController
     end
   end
 
-  # PATCH/PUT /issues/1
-  # PATCH/PUT /issues/1.json
   def update
     respond_to do |format|
       if @issue.update(issue_params)
@@ -80,16 +70,6 @@ class IssuesController < ApplicationController
       format.js
     end
   end
-
-  # DELETE /issues/1
-  # DELETE /issues/1.json
-  # def destroy
-  #   @issue.destroy
-  #   respond_to do |format|
-  #     format.html { redirect_to issues_url, notice: 'Issue was successfully destroyed.' }
-  #     format.json { head :no_content }
-  #   end
-  # end
 
   private
     # Use callbacks to share common setup or constraints between actions.

@@ -4,7 +4,7 @@ namespace :dev do
   usrenames = %w[零加隆 王晶平 馬一九 無思哇 花媽 沒勝文 扁扁 賴德德 波多野結衣 志玲姐姐 陳小刀 賭神 賭聖 習老大 喔爸爸 東拉蕊 吳中憲]
   history_days = 7
 
-  task :test_db_rebuild => ['db:drop:all', 'db:create', 'db:migrate', 'db:seed', 'dev:mass_user', 'dev:user_vote', 'dev:issue_votes', 'dev:agent_votes', 'dev:random_tagging']
+  task :test_db_rebuild => ['db:drop:all', 'db:create', 'db:migrate', 'db:seed', 'dev:mass_user', 'dev:issue_votes', 'dev:agent_votes', 'dev:random_tagging']
 
   task :random_tagging => :environment do
     IssueTag.delete_all
@@ -36,33 +36,6 @@ namespace :dev do
       puts '失敗'
     end
   end
-
-  task :user_vote => :environment do
-    Vote.delete_all
-    User.all.each {|u|
-      inserts =[]
-      hash = {}
-      u.role == 1 ? times = [5,10,15,20,25,35].sample : times = [3,5,7,9,11].sample
-      if u.role == 1
-        times = [5,10,15,20,25,35].sample
-        vote_scope = "agent"
-      else
-        times = [3,5,7,9,11].sample
-        vote_scope = nil
-      end
-
-      Issue.all.sample(times).each{|i|
-        # hash = {:user => u, :issue => i}
-        hash = {:voter_type => "User", :voter_id => u.id, :votable_type => "Issue", :votable_id => i.id, :vote_scope => vote_scope,
-          :vote_weight => 1, :vote_flag => true
-        }
-        inserts.push hash
-      }
-      vote = Vote.create(inserts)
-    }
-    puts "每人投10票"
-  end
-
 
   task :create_seed_elections => :environment do
     Election.create(:name => "2014-九合一選舉", :vote_date => "2014/11/29")

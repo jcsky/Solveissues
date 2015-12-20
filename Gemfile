@@ -10,16 +10,15 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 
 # gem 'bcrypt', '~> 3.1.7'
 gem 'autoprefixer-rails'
-gem 'bootstrap-sass'
 gem "kaminari"
 gem "devise"
-gem 'faker'
 gem "omniauth-facebook"
 gem 'ransack'
 gem 'paperclip'
 gem "select2-rails"
 gem "font-awesome-rails"
 gem 'owlcarousel-rails'
+gem 'bootstrap-sass'
 
 gem 'pg'
 
@@ -38,6 +37,7 @@ group :development do
   gem 'better_errors', '~> 0.9.0'
   gem 'binding_of_caller'
 
+  # rake traceroute
   gem 'traceroute'
   gem 'rack-mini-profiler', require: false
   gem 'bullet'
@@ -47,6 +47,7 @@ group :development, :test do
   gem 'byebug'
   gem 'web-console', '~> 2.0'
   gem 'spring'
+  gem 'faker'
 end
 
 source 'https://rails-assets.org/' do

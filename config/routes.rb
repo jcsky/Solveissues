@@ -17,9 +17,9 @@ Rails.application.routes.draw do
 
   resources :users do
     member do
-      get "/like" => 'votes#like_user'
-      get "/unlike" => 'votes#unlike_user'
-      get "/dislike" => 'votes#dislike_user'
+      get "/like" => 'agent_votes#like_user'
+      get "/unlike" => 'agent_votes#unlike_user'
+      get "/dislike" => 'agent_votes#dislike_user'
     end
   end
 
