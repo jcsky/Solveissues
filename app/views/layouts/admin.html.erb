@@ -2,8 +2,7 @@
 <html>
 <head>
   <title>Solveissues</title>
-  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => false %>
-  <%= javascript_include_tag 'application', 'data-turbolinks-track' => false %>
+  <%= stylesheet_link_tag    'application', media: 'all' %>
   <%= csrf_meta_tags %>
 </head>
 <body class="skin-blue">
@@ -130,7 +129,7 @@
                   <li class="user-header">
                     <img src="<%= current_user.fb_image%>" class="img-circle" alt="User Image">
                     <p>
-                      <%=current_user.email%> 
+                      <%=current_user.email%>
                       <p>Web Developer</p>
                       <small>Member since <%=current_user.created_at.to_s(:db)  %></small>
                     </p>
@@ -338,6 +337,6 @@
       </p>
     <%end%>
 
-
+  <%= javascript_include_tag 'application' %>
 </body>
 </html>

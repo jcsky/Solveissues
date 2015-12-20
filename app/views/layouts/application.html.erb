@@ -3,8 +3,7 @@
 <head>
   <title>Solveissues</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=0">
-  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => false %>
-  <%= javascript_include_tag 'application', 'data-turbolinks-track' => false %>
+  <%= stylesheet_link_tag    'application', media: 'all' %>
   <%= csrf_meta_tags %>
 </head>
 <body>
@@ -31,9 +30,9 @@
     <% end %>
 
 
-<div class="wrapper">
-<%= yield %>
-</div>
-
+  <div class="wrapper">
+    <%= yield %>
+  </div>
+  <%= javascript_include_tag 'application' %>
 </body>
 </html>
