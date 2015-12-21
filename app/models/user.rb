@@ -13,7 +13,7 @@ class User < ActiveRecord::Base
   has_many :election_records
   has_many :issues, :foreign_key => "owner"
   has_one :information, :dependent => :destroy
-  has_one :record,:foreign_key => "agent_id", :dependent => :destroy
+  has_one :record, :foreign_key => "agent_id", :dependent => :destroy
 
   accepts_nested_attributes_for :information, :allow_destroy => true, :reject_if => :all_blank
   has_attached_file :photo, :styles => { :large => "600x600>", :medium => "300x300>", :small => "250x250>", :thumb => "100x100>",:special => "70x70>" }, :default_url => "/images/:style/missing.png"
